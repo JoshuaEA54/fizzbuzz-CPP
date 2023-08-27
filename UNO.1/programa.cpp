@@ -53,7 +53,7 @@ int Card::allColor()
 	return color;
 }
 
-int Card::cardNumber(int _number)
+int Card::cardNumber(int _number)// I haven't used this method
 {
 	_number = number;
 
@@ -62,111 +62,92 @@ int Card::cardNumber(int _number)
 
 
 
-//string Card::cardType()
+
+
+
+//Deck::Deck(int _rows, int _col)
 //{
-//	for (int i = 0; i < 8; i++) {
+//	deck = new Card* [_rows];
 //
-//		for (int j = 0; j < 10; j++) {
-//			if (cardDeck[i][j] == j) {
-//				return ("Normal");
-//			}
-//		}
+//	for (int i = 0; i < _rows; ++i) {
+//		deck[i] = new Card[_col];
 //	}
 //
-//	for (int j = 0; j < 4; j++) {
 //
-//		for (int i = 0; i < 8; i++) {
 //
-//			if (jokerDeck[i][j] == "LoseTurn") {
-//				return ("Especial");
-//			}
-//			else if (jokerDeck[i][j] == "U-Turn") {
-//				return ("Especial");
-//			}
-//			else if (jokerDeck[i][j] == "plus 2") {
-//				return ("Especial");
-//			}
-//			else if (jokerDeck[i][j] == "ChangeColor") {
-//				return ("Especial");
-//			}
-//			else if (jokerDeck[i][j] == "plus 4") {
-//				return ("Especial");
-//			}
-//
-//		}
-//
-//	}
 //}
-
-
-//void Card::defineCD()
+//
+//Card& Deck::getDeck(int _row, int _col)//devuelve referencia de "Card"
 //{
-//	
-//
-//	// there should be just one 0 of each color but for now I won´t do it
-//	
-//	for (int i = 0; i < 8; i++) {
-//
-//		for (int j = 0; j < 10; j++) {
-//			cardDeck[i][j] = j;
-//		}
-//	}
-//
-//	/*for (int i = 0; i < 8; i++) {
-//
-//		for (int j = 0; j < 10; j++) {
-//			cout << " " << cardDeck[i][j];
-//		}
-//		cout << endl;
-//	}*/
+//		return deck[_row][_col];
 //}
 
-//void Card::defineJD()
-//{
-//
-//		for (int j = 0; j < 4; j++) {
-//			
-//			for (int i = 0; i < 8; i++) {
-//
-//				if (j == 0) {
-//					jokerDeck[i][j] = "LoseTurn";
-//				}
-//				  else if (j == 1) {
-//					   jokerDeck[i][j] = "U-Turn";
-//				  }
-//				    else if (j == 2) {
-//					     jokerDeck[i][j] = "plus 2";
-//				    }
-//
-//				if (j == 3) {
-//					if (i < 4) {
-//						jokerDeck[i][j] = "ChangeColor";
-//					}
-//					  else {
-//						jokerDeck[i][j] = "plus 4";
-//					  }
-//				}
-//			}
-//			
-//		}
-//
-//}
-
-Deck::Deck(int _rows, int _col)
+int defineColor(int _variable, int& _x, Card& _aux)
 {
-	deck = new Card* [_rows];
+	
 
-	for (int i = 0; i < _rows; ++i) {
-		deck[i] = new Card[_col];
+	if (_variable == 0 || _variable == 4) {
+		_x = _aux.redColor();
+	}
+	else if (_variable == 1 || _variable == 5) {
+		_x = _aux.yellowColor();
+	}
+	else if (_variable == 2 || _variable == 6) {
+		_x = _aux.greenColor();
+	}
+	else {
+		_x = _aux.blueColor();
 	}
 
-
-
+	return _x;
 }
 
-Card& Deck::getDeck(int _row, int _col)//devuelve referencia de "Card"
-{
-		return deck[_row][_col];
+Card deck(){
+
+	int x = 0;
+	Card deck[8][14], aux;
+
+	//Normal Cards
+	for (int i = 0; i < 8; i++) {
+
+		defineColor(i, x, aux);
+
+		for (int j = 0; j < 10; j++) {
+			deck[i][j] = Card(j, "normal", x);
+		}
+
+	}
+	//Wild Cards
+	for (int i = 10; i < 14; i++) {
+
+
+		for (int j = 0; j < 8; j++) {
+
+			defineColor(j, x, aux);// this method returns 'x' with the color number
+
+			if (i == 10) {
+				deck[j][i] = Card("LoseTurn", x);
+			}
+			else if (i == 11) {
+				deck[j][i] = Card("U - Turn", x);
+			}
+			else if (i == 12) {
+				deck[j][i] = Card("plus 2", x);
+			}
+			else if (i == 13) {
+				x = aux.allColor(); // 'x' equal to 5, it means the four colors
+
+				if (j < 4) {
+					deck[j][i] = Card("ChangeColor", x);
+				}
+				else {
+					deck[j][i] = Card("plus 4", x);
+				}
+
+			}
+		}
+
+
+	}
+	return Card (deck[0][0]);
 }
-
-
