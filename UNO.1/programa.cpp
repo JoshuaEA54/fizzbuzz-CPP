@@ -1,8 +1,6 @@
 #include "programa.h"
 
 
-
-
 Card::Card(int _number, string _type, int _color)
 {
 	_number = number;
@@ -60,28 +58,6 @@ int Card::cardNumber(int _number)// I haven't used this method
 	return number;
 }
 
-
-
-
-
-
-//Deck::Deck(int _rows, int _col)
-//{
-//	deck = new Card* [_rows];
-//
-//	for (int i = 0; i < _rows; ++i) {
-//		deck[i] = new Card[_col];
-//	}
-//
-//
-//
-//}
-//
-//Card& Deck::getDeck(int _row, int _col)//devuelve referencia de "Card"
-//{
-//		return deck[_row][_col];
-//}
-
 int defineColor(int _variable, int& _x, Card& _aux)
 {
 	
@@ -102,10 +78,15 @@ int defineColor(int _variable, int& _x, Card& _aux)
 	return _x;
 }
 
-Card deck(){
+Card** deck(){
 
 	int x = 0;
-	Card deck[8][14], aux;
+	Card** deck = new Card* [8], aux;
+	for (int i = 0; i < 8; i++) {
+		deck[i] = new Card[14];
+	}
+	//defining the matrix
+
 
 	//Normal Cards
 	for (int i = 0; i < 8; i++) {
@@ -149,5 +130,19 @@ Card deck(){
 
 
 	}
-	return Card (deck[0][0]);
+	return deck;
+}
+
+void mainWindow()
+{
+
+	CImg<unsigned char> image("UNOPrueba3.bmp");
+	CImg<unsigned char> newSize = image.resize(1366, 680);//1366 768 is the normal resolution of this pc 
+	CImgDisplay window(newSize, "UNO - Joshua Elizondo Abarca");
+
+	// Keeps window open until it closes
+	while (!window.is_closed()) {
+		window.wait();
+	}
+	
 }
