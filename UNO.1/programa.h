@@ -28,29 +28,14 @@ public:
 	int allColor();//5
 
 	int cardNumber(int _number);
-	   //void cardColor();
-	  // string cardType();
+	   
 
 	   
 };
 
 int defineColor(int _variable,int& _x, Card& _aux);
-Card deck();
-
-//class Deck {
-//
-//private:
-//
-//	int rows;                  dudoso
-//	int col;
-//	Card** deck;
-//
-//public:
-//
-//	Deck(int _rows, int _col);
-//	Card& getDeck(int _row, int _col);
-//};
-
+Card** deck();
+void mainWindow();
 
 
      
