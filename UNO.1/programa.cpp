@@ -136,13 +136,78 @@ Card** deck(){
 void mainWindow()
 {
 
-	CImg<unsigned char> image("UNOPrueba3.bmp");
-	CImg<unsigned char> newSize = image.resize(1366, 680);//1366 768 is the normal resolution of this pc 
-	CImgDisplay window(newSize, "UNO - Joshua Elizondo Abarca");
+	RenderWindow window(VideoMode(1366, 768), "UNO");
 
-	// Keeps window open until it closes
-	while (!window.is_closed()) {
-		window.wait();
+	Music music;
+	music.openFromFile("UNO 2K17 Full Music Album.ogg");
+	music.play();
+
+	// Cargar una imagen desde un archivo
+	Texture texture;
+	texture.loadFromFile("WhatsApp Image 2023-08-29 at 7.20.14 PM.jpeg");
+
+	// Crear un sprite para mostrar la imagen
+	Sprite sprite(texture);
+
+	Font font;
+	font.loadFromFile("blocking.ttf");
+
+	// Botón 1
+	RectangleShape button1(Vector2f(350, 150));
+	button1.setPosition(520, 300);
+	button1.setFillColor(Color::Yellow);
+
+	Text buttonText1("Player VS Computer", font, 40);
+	buttonText1.setPosition(550, 350);
+	buttonText1.setFillColor(Color::Black);
+
+	// Botón 2
+	RectangleShape button2(Vector2f(350, 150));
+	button2.setPosition(520, 520);
+	button2.setFillColor(Color::Yellow);
+
+	Text buttonText2("Player VS Player", font, 40);
+	buttonText2.setPosition(570, 570);
+	buttonText2.setFillColor(Color::Black);
+
+	while (window.isOpen()) {
+		Event event;
+		while (window.pollEvent(event)) {
+
+			if (event.type == Event::Closed) {
+				window.close();
+			}
+
+			// Detectar clic en los botones
+			if (event.type == Event::MouseButtonPressed) {
+				Vector2i mousePosition = Mouse::getPosition(window);
+
+				if (button1.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
+					button1.setFillColor(Color::Cyan);
+				}
+
+				if (button2.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
+					button2.setFillColor(Color::Blue);
+				}
+			}
+
+			// Restaurar colores de los botones al soltar el botón del mouse
+			if (event.type == Event::MouseButtonReleased) {
+				button1.setFillColor(Color::Yellow);
+				button2.setFillColor(Color::Yellow);
+			}
+		}
+
+		window.clear(Color::White);
+
+		// Dibujar elementos en la ventana
+		window.draw(sprite);
+		window.draw(button1);
+		window.draw(buttonText1);
+		window.draw(button2);
+		window.draw(buttonText2);
+
+		window.display();
 	}
 	
 }

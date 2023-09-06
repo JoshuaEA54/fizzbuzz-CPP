@@ -1,10 +1,11 @@
 
 
 #include <iostream>
-#include "CImg.h"
-using namespace std;
-using namespace cimg_library;
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
+using namespace sf;
+using namespace std;
 
 
 class Card {
