@@ -22,13 +22,13 @@ public:
 
 	Card(int _number, string _type, int _color);
 	Card(string _type, int _color);
-	//prueba
-	Card(int _number, string _type, int _color, Texture _texture);
-	Card(string _type, int _color, Texture _texture);
-
 	Card();
 	
 	void setTexture(int _row, int _col);
+
+
+	Texture getTexture();
+	string getType();
 
 	int redColor();//1
 	int yellowColor();//2
@@ -44,10 +44,9 @@ public:
 
 int defineColor(int _variable,int& _x, Card& _aux);
 
-Card** deck();
+Card** deckk();
 
-vector <Texture> showDeck();
-
+vector <Sprite> spritesVector();
 
 void mainWindow();
 void gameWindow(RenderWindow& _window);

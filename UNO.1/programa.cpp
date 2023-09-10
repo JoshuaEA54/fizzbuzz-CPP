@@ -1,6 +1,5 @@
 #include "programa.h"
 
-
 Card::Card(int _number, string _type, int _color)
 {
 	number = _number;
@@ -14,8 +13,6 @@ Card::Card(string _type, int _color)
 	color = _color;
 }
 
-
-
 Card::Card()
 {
 	number = 0;
@@ -26,15 +23,20 @@ Card::Card()
 
 void Card::setTexture(int _row, int _col)
 {
-	
-	textureCard.loadFromFile("card_" + to_string(_row) + "_" + to_string(_col) + ".png");
-		
+	if (!textureCard.loadFromFile("Deck/card_" + to_string(_row) + "_" + to_string(_col) + ".png")) {
+		std::cout << "Error al cargar la textura." << std::endl;
+	}
 	
 }
 
 Texture Card::getTexture()
 {
 	return textureCard;
+}
+
+string Card::getType()
+{
+	return type;
 }
 
 int Card::redColor()
@@ -69,7 +71,7 @@ int Card::allColor()
 
 int Card::cardNumber(int _number)// I haven't used this method
 {
-	_number = number;
+	number = _number;
 
 	return number;
 }
@@ -94,7 +96,7 @@ int defineColor(int _variable, int& _x, Card& _aux)
 	return _x;
 }
 
-Card** deck(){
+Card** deckk(){
 
 	int x = 0;
 	Card** deck = new Card* [8], aux;
@@ -102,7 +104,6 @@ Card** deck(){
 		deck[i] = new Card[14];
 	}
 	//defining the matrix
-
 
 	//Normal Cards
 	for (int i = 0; i < 8; i++) {
@@ -144,6 +145,7 @@ Card** deck(){
 
 			}
 			deck[j][i].setTexture(j, i);
+			
 		}
 
 
@@ -151,16 +153,17 @@ Card** deck(){
 	return deck;
 }
 
-vector<Sprite> spritesVector(Card** _deck)
+vector <Sprite> spritesVector()
 {
 	vector <Sprite> cards;
 
-	_deck = deck();
+	Card** deckReal = deckk();//
+	
 
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 14; j++) {
-
-			Sprite sprite(_deck[i][j].getTexture());
+			
+			Sprite sprite(deckReal[i][j].getTexture());
 
 			sprite.setPosition(630, 280); // Cambia las coordenadas (x, y) según sea necesario
 			sprite.setScale(0.25f, 0.25f); // Cambia la escala según sea necesario
@@ -169,7 +172,6 @@ vector<Sprite> spritesVector(Card** _deck)
 		}
 	}
 	
-
 	return cards;
 }
 
@@ -269,8 +271,7 @@ void gameWindow(RenderWindow& _window)
 	RenderWindow game;
 	game.create(VideoMode(1366, 768), "UNO", Style::Default);
 	
-
-    //vector <Texture> centralDeck = showDeck();
+	//vector <Sprite> centralDeck = spritesVector();
 	
 	Event evnt2;
 	
@@ -282,21 +283,21 @@ void gameWindow(RenderWindow& _window)
 			if (evnt2.type == Event::Closed) {
 				game.close();
 			}
-		
 
 		}
 
 		game.clear(Color::Red);
 
-		for (const Texture& cards : centralDeck)// el bucle me recorre todo el vector de cartas
+
+		for (const Sprite& spritte : spritesVector())
 		{
-			Sprite sprite(cards);
-			
-			
-			game.draw(sprite);
+			game.draw(spritte);
 		}
+
 
 		game.display();
 	}
 
+	
+	
 }
