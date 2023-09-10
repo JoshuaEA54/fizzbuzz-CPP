@@ -3,16 +3,18 @@
 
 Card::Card(int _number, string _type, int _color)
 {
-	_number = number;
-	_type = type;
-	_color = color;
+	number = _number;
+	type = _type;
+	color = _color;
 }
 
 Card::Card(string _type, int _color)
 {
-	_type = type;
-	_color = color;
+	type = _type;
+	color = _color;
 }
+
+
 
 Card::Card()
 {
@@ -28,6 +30,11 @@ void Card::setTexture(int _row, int _col)
 	textureCard.loadFromFile("card_" + to_string(_row) + "_" + to_string(_col) + ".png");
 		
 	
+}
+
+Texture Card::getTexture()
+{
+	return textureCard;
 }
 
 int Card::redColor()
@@ -104,6 +111,7 @@ Card** deck(){
 
 		for (int j = 0; j < 10; j++) {
 			deck[i][j] = Card(j, "normal", x);
+			deck[i][j].setTexture(i, j);//we load the texture into the deck
 		}
 
 	}
@@ -135,6 +143,7 @@ Card** deck(){
 				}
 
 			}
+			deck[j][i].setTexture(j, i);
 		}
 
 
@@ -142,22 +151,26 @@ Card** deck(){
 	return deck;
 }
 
-
-vector <Texture> showDeck()
+vector<Sprite> spritesVector(Card** _deck)
 {
-	
-	vector <Texture> centralDeck;
-	int number;
-	
-	Texture auxTextures;
-	for (int i = 0; i < 52; i++) {
-		number = rand() % 52;
-		// aqui cargo y meto las texturas al vector centralDeck
-		auxTextures.loadFromFile("Deck/card" + to_string(number) + ".png");
-		centralDeck.push_back(auxTextures);
+	vector <Sprite> cards;
+
+	_deck = deck();
+
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 14; j++) {
+
+			Sprite sprite(_deck[i][j].getTexture());
+
+			sprite.setPosition(630, 280); // Cambia las coordenadas (x, y) según sea necesario
+			sprite.setScale(0.25f, 0.25f); // Cambia la escala según sea necesario
+
+			cards.push_back(sprite);// meto cada sprite en un vector de sprites
+		}
 	}
 	
-	return centralDeck;
+
+	return cards;
 }
 
 void mainWindow()
@@ -256,9 +269,9 @@ void gameWindow(RenderWindow& _window)
 	RenderWindow game;
 	game.create(VideoMode(1366, 768), "UNO", Style::Default);
 	
-    vector <Texture> centralDeck = showDeck();
-	
 
+    //vector <Texture> centralDeck = showDeck();
+	
 	Event evnt2;
 	
 
@@ -279,9 +292,7 @@ void gameWindow(RenderWindow& _window)
 		{
 			Sprite sprite(cards);
 			
-			sprite.setPosition(630, 280); // Cambia las coordenadas (x, y) según sea necesario
-
-			sprite.setScale(0.25f, 0.25f); // Cambia la escala según sea necesario
+			
 			game.draw(sprite);
 		}
 
