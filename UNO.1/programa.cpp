@@ -72,14 +72,12 @@ int Card::allColor()
 int Card::cardNumber(int _number)// I haven't used this method
 {
 	number = _number;
-
 	return number;
 }
 
 int defineColor(int _variable, int& _x, Card& _aux)
 {
 	
-
 	if (_variable == 0 || _variable == 4) {
 		_x = _aux.redColor();
 	}
@@ -118,7 +116,6 @@ Card** deckk(){
 	}
 	//Wild Cards
 	for (int i = 10; i < 14; i++) {
-
 
 		for (int j = 0; j < 8; j++) {
 
@@ -159,7 +156,6 @@ vector <Sprite> spritesVector()
 
 	Card** deckReal = deckk();//
 	
-
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 14; j++) {
 			
@@ -180,8 +176,6 @@ void mainWindow()
 	//creation of the window
 	RenderWindow window;
 	window.create(VideoMode(1366, 768), "UNO", Style::Default);
-
-	
 
 	Music music;
 	music.openFromFile("UNO 2K17 Full Music Album.ogg");
@@ -255,8 +249,6 @@ void mainWindow()
 		window.draw(buttonText1);
 		window.draw(button2);
 		window.draw(buttonText2);
-	
-         
 
 		window.display();
 	}
@@ -275,7 +267,6 @@ void gameWindow(RenderWindow& _window)
 	
 	Event evnt2;
 	
-
 	while (game.isOpen()) {
 
 		while (game.pollEvent(evnt2)) {
@@ -288,12 +279,10 @@ void gameWindow(RenderWindow& _window)
 
 		game.clear(Color::Red);
 
-
 		for (const Sprite& spritte : spritesVector())
 		{
 			game.draw(spritte);
 		}
-
 
 		game.display();
 	}
