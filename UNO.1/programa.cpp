@@ -19,6 +19,15 @@ Card::Card()
 	number = 0;
 	type = "";
 	color = 0;
+	
+}
+
+void Card::setTexture(int _row, int _col)
+{
+	
+	textureCard.loadFromFile("card_" + to_string(_row) + "_" + to_string(_col) + ".png");
+		
+	
 }
 
 int Card::redColor()
@@ -133,10 +142,31 @@ Card** deck(){
 	return deck;
 }
 
+
+vector <Texture> showDeck()
+{
+	
+	vector <Texture> centralDeck;
+	int number;
+	
+	Texture auxTextures;
+	for (int i = 0; i < 52; i++) {
+		number = rand() % 52;
+		// aqui cargo y meto las texturas al vector centralDeck
+		auxTextures.loadFromFile("Deck/card" + to_string(number) + ".png");
+		centralDeck.push_back(auxTextures);
+	}
+	
+	return centralDeck;
+}
+
 void mainWindow()
 {
+	//creation of the window
+	RenderWindow window;
+	window.create(VideoMode(1366, 768), "UNO", Style::Default);
 
-	RenderWindow window(VideoMode(1366, 768), "UNO");
+	
 
 	Music music;
 	music.openFromFile("UNO 2K17 Full Music Album.ogg");
@@ -170,20 +200,25 @@ void mainWindow()
 	buttonText2.setPosition(570, 570);
 	buttonText2.setFillColor(Color::Black);
 
-	while (window.isOpen()) {
-		Event event;
-		while (window.pollEvent(event)) {
+	Event evnt;
 
-			if (event.type == Event::Closed) {
+	while (window.isOpen()) {
+		
+        Vector2i mousePosition = Mouse::getPosition(window);
+		while (window.pollEvent(evnt)) {
+
+			if (evnt.type == Event::Closed) {
 				window.close();
 			}
-
+			
 			// Detectar clic en los botones
-			if (event.type == Event::MouseButtonPressed) {
-				Vector2i mousePosition = Mouse::getPosition(window);
-
+			if (evnt.type == Event::MouseButtonPressed) {
+				
+                	          
 				if (button1.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
-					button1.setFillColor(Color::Cyan);
+					gameWindow(window);
+					
+					
 				}
 
 				if (button2.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
@@ -191,23 +226,66 @@ void mainWindow()
 				}
 			}
 
-			// Restaurar colores de los botones al soltar el botón del mouse
-			if (event.type == Event::MouseButtonReleased) {
-				button1.setFillColor(Color::Yellow);
-				button2.setFillColor(Color::Yellow);
-			}
+			
 		}
 
-		window.clear(Color::White);
 
 		// Dibujar elementos en la ventana
+		
+		window.clear();
+
+		//aqui en medio de clear y display dibujar los elementos
 		window.draw(sprite);
 		window.draw(button1);
 		window.draw(buttonText1);
 		window.draw(button2);
 		window.draw(buttonText2);
+	
+         
 
 		window.display();
 	}
 	
+}
+
+void gameWindow(RenderWindow& _window)
+{
+	_window.close();// close the last window
+
+	//second window
+	RenderWindow game;
+	game.create(VideoMode(1366, 768), "UNO", Style::Default);
+	
+    vector <Texture> centralDeck = showDeck();
+	
+
+	Event evnt2;
+	
+
+	while (game.isOpen()) {
+
+		while (game.pollEvent(evnt2)) {
+		
+			if (evnt2.type == Event::Closed) {
+				game.close();
+			}
+		
+
+		}
+
+		game.clear(Color::Red);
+
+		for (const Texture& cards : centralDeck)// el bucle me recorre todo el vector de cartas
+		{
+			Sprite sprite(cards);
+			
+			sprite.setPosition(630, 280); // Cambia las coordenadas (x, y) según sea necesario
+
+			sprite.setScale(0.25f, 0.25f); // Cambia la escala según sea necesario
+			game.draw(sprite);
+		}
+
+		game.display();
+	}
+
 }
