@@ -3,6 +3,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <vector>
 
 using namespace sf;
 using namespace std;
@@ -15,6 +16,7 @@ private:
     int number;
 	string type;
 	int color;
+	Texture textureCard;
 	
 public:
 
@@ -22,6 +24,12 @@ public:
 	Card(string _type, int _color);
 	Card();
 	
+	void setTexture(int _row, int _col);
+	void setTexture(Texture _texture);
+
+	Texture getTexture();
+	string getType();
+
 	int redColor();//1
 	int yellowColor();//2
 	int greenColor();//3
@@ -35,8 +43,13 @@ public:
 };
 
 int defineColor(int _variable,int& _x, Card& _aux);
-Card** deck();
+
+Card** deckk();
+
+void spritesVector(RenderWindow& _game);
+
 void mainWindow();
+void gameWindow(RenderWindow& _window);
 
 
      
