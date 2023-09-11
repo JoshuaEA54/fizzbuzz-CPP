@@ -29,6 +29,12 @@ void Card::setTexture(int _row, int _col)
 	
 }
 
+void Card::setTexture(Texture _texture)
+{
+	textureCard = _texture;
+}
+
+
 Texture Card::getTexture()
 {
 	return textureCard;
@@ -150,25 +156,35 @@ Card** deckk(){
 	return deck;
 }
 
-vector <Sprite> spritesVector()
+void spritesVector(RenderWindow& _game)
 {
 	vector <Sprite> cards;
 
-	Card** deckReal = deckk();//
+	Card** deckReal = deckk();
+	
+	//Sprite sprite;
+	
+	//prueba: hacer un objeto de tipo carta matriz que almacene cada carta de deckReal
 	
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 14; j++) {
 			
 			Sprite sprite(deckReal[i][j].getTexture());
-
 			sprite.setPosition(630, 280); // Cambia las coordenadas (x, y) según sea necesario
 			sprite.setScale(0.25f, 0.25f); // Cambia la escala según sea necesario
+            _game.draw(sprite);
 
-			cards.push_back(sprite);// meto cada sprite en un vector de sprites
+			//cards.push_back(sprite);// meto cada sprite en un vector de sprites
+
+			
 		}
 	}
 	
-	return cards;
+	//RenderTexture renderTexture;
+	/*for (const Sprite& spritte : cards) {
+         
+	}*/
+			    
 }
 
 void mainWindow()
@@ -263,7 +279,7 @@ void gameWindow(RenderWindow& _window)
 	RenderWindow game;
 	game.create(VideoMode(1366, 768), "UNO", Style::Default);
 	
-	//vector <Sprite> centralDeck = spritesVector();
+	/*vector <Sprite> centralDeck = spritesVector();*/
 	
 	Event evnt2;
 	
@@ -278,15 +294,14 @@ void gameWindow(RenderWindow& _window)
 		}
 
 		game.clear(Color::Red);
-
-		for (const Sprite& spritte : spritesVector())
-		{
-			game.draw(spritte);
-		}
-
+			
+		spritesVector(game);
+		/*Texture textura; textura.loadFromFile("Deck/card_" + to_string(0) + "_" + to_string(0) + ".png");
+		Sprite sprite;
+		sprite.setTexture(textura);
+		game.draw(sprite);*/
+		
 		game.display();
 	}
 
-	
-	
 }

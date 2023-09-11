@@ -25,7 +25,7 @@ public:
 	Card();
 	
 	void setTexture(int _row, int _col);
-
+	void setTexture(Texture _texture);
 
 	Texture getTexture();
 	string getType();
@@ -46,7 +46,7 @@ int defineColor(int _variable,int& _x, Card& _aux);
 
 Card** deckk();
 
-vector <Sprite> spritesVector();
+void spritesVector(RenderWindow& _game);
 
 void mainWindow();
 void gameWindow(RenderWindow& _window);
