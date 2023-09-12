@@ -18,31 +18,23 @@ Card::Card()
 	number = 0;
 	type = "";
 	color = 0;
-	
+
 }
 
-void Card::setTexture(int _row, int _col)
+void Card::setSprite(Texture& _texture)
 {
-	if (!textureCard.loadFromFile("Deck/card_" + to_string(_row) + "_" + to_string(_col) + ".png")) {
-		std::cout << "Error al cargar la textura." << std::endl;
-	}
-	
+	spriteOfCard.setTexture(_texture);
 }
 
-void Card::setTexture(Texture _texture)
-{
-	textureCard = _texture;
-}
-
-
-Texture Card::getTexture()
-{
-	return textureCard;
-}
 
 string Card::getType()
 {
 	return type;
+}
+
+Sprite Card::getSprite()
+{
+	return spriteOfCard;
 }
 
 int Card::redColor()
@@ -83,7 +75,7 @@ int Card::cardNumber(int _number)// I haven't used this method
 
 int defineColor(int _variable, int& _x, Card& _aux)
 {
-	
+
 	if (_variable == 0 || _variable == 4) {
 		_x = _aux.redColor();
 	}
@@ -100,10 +92,10 @@ int defineColor(int _variable, int& _x, Card& _aux)
 	return _x;
 }
 
-Card** deckk(){
+Card** deckk() {
 
 	int x = 0;
-	Card** deck = new Card* [8], aux;
+	Card** deck = new Card * [8], aux;
 	for (int i = 0; i < 8; i++) {
 		deck[i] = new Card[14];
 	}
@@ -116,7 +108,7 @@ Card** deckk(){
 
 		for (int j = 0; j < 10; j++) {
 			deck[i][j] = Card(j, "normal", x);
-			deck[i][j].setTexture(i, j);//we load the texture into the deck
+			
 		}
 
 	}
@@ -147,44 +139,38 @@ Card** deckk(){
 				}
 
 			}
-			deck[j][i].setTexture(j, i);
 			
 		}
-
 
 	}
 	return deck;
 }
 
-void spritesVector(RenderWindow& _game)
-{
-	vector <Sprite> cards;
 
-	Card** deckReal = deckk();
-	
-	//Sprite sprite;
-	
-	//prueba: hacer un objeto de tipo carta matriz que almacene cada carta de deckReal
-	
+void drawSprites(RenderWindow& _game, Card** _deck)
+{
+
+	/*Card** carta = new Card * [8];
+	for (int i = 0; i < 8; i++) {
+		carta[i] = new Card[14];
+	}*/
+	Texture textura;
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 14; j++) {
-			
-			Sprite sprite(deckReal[i][j].getTexture());
-			sprite.setPosition(630, 280); // Cambia las coordenadas (x, y) según sea necesario
-			sprite.setScale(0.25f, 0.25f); // Cambia la escala según sea necesario
-            _game.draw(sprite);
 
-			//cards.push_back(sprite);// meto cada sprite en un vector de sprites
+			textura.loadFromFile("Deck/card_" + to_string(i) + "_" + to_string(j) + ".png");
 
-			
+			_deck[i][j].setSprite(textura);
+			Sprite sprite;
+			sprite = _deck[i][j].getSprite();
+
+			sprite.setPosition(630, 280);
+			sprite.setScale(0.25f, 0.25f);
+
+			_game.draw(sprite);
 		}
 	}
-	
-	//RenderTexture renderTexture;
-	/*for (const Sprite& spritte : cards) {
-         
-	}*/
-			    
+
 }
 
 void mainWindow()
@@ -228,22 +214,22 @@ void mainWindow()
 	Event evnt;
 
 	while (window.isOpen()) {
-		
-        Vector2i mousePosition = Mouse::getPosition(window);
+
+		Vector2i mousePosition = Mouse::getPosition(window);
 		while (window.pollEvent(evnt)) {
 
 			if (evnt.type == Event::Closed) {
 				window.close();
 			}
-			
+
 			// Detectar clic en los botones
 			if (evnt.type == Event::MouseButtonPressed) {
-				
-                	          
+
+
 				if (button1.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
 					gameWindow(window);
-					
-					
+
+
 				}
 
 				if (button2.getGlobalBounds().contains(mousePosition.x, mousePosition.y)) {
@@ -251,12 +237,12 @@ void mainWindow()
 				}
 			}
 
-			
+
 		}
 
 
 		// Dibujar elementos en la ventana
-		
+
 		window.clear();
 
 		//aqui en medio de clear y display dibujar los elementos
@@ -268,7 +254,7 @@ void mainWindow()
 
 		window.display();
 	}
-	
+
 }
 
 void gameWindow(RenderWindow& _window)
@@ -278,15 +264,15 @@ void gameWindow(RenderWindow& _window)
 	//second window
 	RenderWindow game;
 	game.create(VideoMode(1366, 768), "UNO", Style::Default);
-	
+
 	/*vector <Sprite> centralDeck = spritesVector();*/
-	
+
 	Event evnt2;
-	
+
 	while (game.isOpen()) {
 
 		while (game.pollEvent(evnt2)) {
-		
+
 			if (evnt2.type == Event::Closed) {
 				game.close();
 			}
@@ -294,13 +280,13 @@ void gameWindow(RenderWindow& _window)
 		}
 
 		game.clear(Color::Red);
-			
-		spritesVector(game);
-		/*Texture textura; textura.loadFromFile("Deck/card_" + to_string(0) + "_" + to_string(0) + ".png");
-		Sprite sprite;
-		sprite.setTexture(textura);
-		game.draw(sprite);*/
-		
+
+
+
+		drawSprites(game, deckk());
+
+
+
 		game.display();
 	}
 

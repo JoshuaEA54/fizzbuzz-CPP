@@ -12,23 +12,23 @@ using namespace std;
 class Card {
 
 private:
-	    
-    int number;
+
+	int number;
 	string type;
 	int color;
-	Texture textureCard;
-	
+	Sprite spriteOfCard;
+
+
 public:
 
 	Card(int _number, string _type, int _color);
 	Card(string _type, int _color);
 	Card();
-	
-	void setTexture(int _row, int _col);
-	void setTexture(Texture _texture);
 
-	Texture getTexture();
+	void setSprite(Texture& _texture);
+
 	string getType();
+	Sprite getSprite();
 
 	int redColor();//1
 	int yellowColor();//2
@@ -37,16 +37,16 @@ public:
 	int allColor();//5
 
 	int cardNumber(int _number);
-	   
 
-	   
+
 };
 
-int defineColor(int _variable,int& _x, Card& _aux);
+int defineColor(int _variable, int& _x, Card& _aux);
 
 Card** deckk();
 
-void spritesVector(RenderWindow& _game);
+
+void drawSprites(RenderWindow& _game, Card** _deck);
 
 void mainWindow();
 void gameWindow(RenderWindow& _window);
