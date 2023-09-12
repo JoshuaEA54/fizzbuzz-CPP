@@ -24,10 +24,16 @@ public:
 	Card(int _number, string _type, int _color);
 	Card(string _type, int _color);
 	Card();
+	~Card();
 
+	void setNumber(int _number);
+	void setType(string _type);
+	void setColor(int _color);
 	void setSprite(Texture& _texture);
 
+	int getNumber();
 	string getType();
+	int getColor();
 	Sprite getSprite();
 
 	int redColor();//1
@@ -36,18 +42,20 @@ public:
 	int blueColor();//4
 	int allColor();//5
 
-	int cardNumber(int _number);
+	int defineColor(int _variable, int& _x, Card& _aux);
 
 
 };
 
-int defineColor(int _variable, int& _x, Card& _aux);
-
 Card** deckk();
 
 
+//draws all the cards in order
 void drawSprites(RenderWindow& _game, Card** _deck);
+//trying to do it in desorder
+void firstCard(RenderWindow& _game, Card** _deck,int _row, int _col);
 
+//windows
 void mainWindow();
 void gameWindow(RenderWindow& _window);
 

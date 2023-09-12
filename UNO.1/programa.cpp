@@ -21,15 +21,44 @@ Card::Card()
 
 }
 
+Card::~Card()
+{
+}
+
+void Card::setNumber(int _number)
+{
+	number = _number;
+}
+
+void Card::setType(string _type)
+{
+	type = _type;
+}
+
+void Card::setColor(int _color)
+{
+	color = _color;
+}
+
 void Card::setSprite(Texture& _texture)
 {
 	spriteOfCard.setTexture(_texture);
 }
 
 
+int Card::getNumber()
+{
+	return number;
+}
+
 string Card::getType()
 {
 	return type;
+}
+
+int Card::getColor()
+{
+	return color;
 }
 
 Sprite Card::getSprite()
@@ -67,13 +96,8 @@ int Card::allColor()
 	return color;
 }
 
-int Card::cardNumber(int _number)// I haven't used this method
-{
-	number = _number;
-	return number;
-}
 
-int defineColor(int _variable, int& _x, Card& _aux)
+int Card::defineColor(int _variable, int& _x, Card& _aux)
 {
 
 	if (_variable == 0 || _variable == 4) {
@@ -104,11 +128,11 @@ Card** deckk() {
 	//Normal Cards
 	for (int i = 0; i < 8; i++) {
 
-		defineColor(i, x, aux);
+		aux.defineColor(i, x, aux);
 
 		for (int j = 0; j < 10; j++) {
 			deck[i][j] = Card(j, "normal", x);
-			
+			cout << x;
 		}
 
 	}
@@ -117,7 +141,7 @@ Card** deckk() {
 
 		for (int j = 0; j < 8; j++) {
 
-			defineColor(j, x, aux);// this method returns 'x' with the color number
+			aux.defineColor(j, x, aux);// this method returns 'x' with the color number
 
 			if (i == 10) {
 				deck[j][i] = Card("LoseTurn", x);
@@ -147,23 +171,23 @@ Card** deckk() {
 }
 
 
+
 void drawSprites(RenderWindow& _game, Card** _deck)
 {
-
 	/*Card** carta = new Card * [8];
 	for (int i = 0; i < 8; i++) {
 		carta[i] = new Card[14];
 	}*/
 	Texture textura;
+	Sprite sprite;
+
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 14; j++) {
 
 			textura.loadFromFile("Deck/card_" + to_string(i) + "_" + to_string(j) + ".png");
-
 			_deck[i][j].setSprite(textura);
-			Sprite sprite;
-			sprite = _deck[i][j].getSprite();
 
+			sprite = _deck[i][j].getSprite();
 			sprite.setPosition(630, 280);
 			sprite.setScale(0.25f, 0.25f);
 
@@ -171,6 +195,22 @@ void drawSprites(RenderWindow& _game, Card** _deck)
 		}
 	}
 
+}
+
+void firstCard(RenderWindow& _game,Card** _deck, int _row, int _col)
+{
+	Texture textura;
+	Sprite sprite;
+
+	textura.loadFromFile("Deck/card_" + to_string(_row) + "_" + to_string(_col) + ".png");
+	_deck[_row][_col].setSprite(textura);// we get that position from the matrix
+
+	sprite = _deck[_row][_col].getSprite();
+	sprite.setPosition(480, 280);
+	sprite.setScale(0.25f, 0.25f);
+
+	_game.draw(sprite);
+		
 }
 
 void mainWindow()
@@ -265,10 +305,15 @@ void gameWindow(RenderWindow& _window)
 	RenderWindow game;
 	game.create(VideoMode(1366, 768), "UNO", Style::Default);
 
-	/*vector <Sprite> centralDeck = spritesVector();*/
-
 	Event evnt2;
 
+    Card** deck = deckk();
+
+	srand(time(NULL));
+	int row = rand()%8; int col = rand() % 14;
+	
+
+	//Defining out of the while
 	while (game.isOpen()) {
 
 		while (game.pollEvent(evnt2)) {
@@ -281,12 +326,10 @@ void gameWindow(RenderWindow& _window)
 
 		game.clear(Color::Red);
 
-
-
-		drawSprites(game, deckk());
-
-
-
+		drawSprites(game, deck);
+		
+		firstCard(game, deck,row,col);
+		
 		game.display();
 	}
 
