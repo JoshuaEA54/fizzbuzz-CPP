@@ -1,11 +1,11 @@
 
-#include "programa.h"
+#include "Game.h"
 
 
 int main()
 {
-	
-	mainWindow();
+	Game game;
+	game.mainWindow();
 
 
 
