@@ -1,21 +1,15 @@
 #pragma once
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <vector>
-
-#include "Card.h"
-#include "Deck.h"
+//#include "Card.h"
 #include "Player.h"
-
-using namespace sf;
-using namespace std;
 
 class Game
 {
 private:
 
 	Player player;
+
+	Sprite sprite;
+	Texture texture;
 	
 public:
 
@@ -24,8 +18,17 @@ public:
 	~Game();
 
 	void setPlayer(Player _player);
+	void setSprite(Sprite& _sprite);
+	void setTexture(Texture& _texture);
 	
 	Player getPlayer();
+	Sprite getSprite();
+	Texture getTexture();
+
+	void drawPlayerDeck(RenderWindow& _game, int* rows, int* cols);
+	void firstCard(RenderWindow& _game, int _row, int _col);
+	void printHideCard(RenderWindow& _game);
+	
 
 	void mainWindow();
 	void gameWindow(RenderWindow& _window);

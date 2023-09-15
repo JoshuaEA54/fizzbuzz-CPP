@@ -1,9 +1,14 @@
 #include "Deck.h"
 
-Deck::Deck(Card** _cards, int _amount)
+Deck::Deck()
 {
-	cards = _cards;
-	amount = _amount;
+	cards = new Card*[8];
+
+	for (int i = 0; i < 8; i++) {
+		cards[i] = NULL;
+	}
+
+	amount = 0;
 }
 
 Deck::~Deck()

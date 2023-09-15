@@ -15,9 +15,29 @@ void Game::setPlayer(Player _player)
 	player = _player;
 }
 
+void Game::setSprite(Sprite& _sprite)
+{
+	sprite = _sprite;
+}
+
+void Game::setTexture(Texture& _texture)
+{
+	texture = _texture;
+}
+
 Player Game::getPlayer()
 {
 	return player;
+}
+
+Sprite Game::getSprite()
+{
+	return sprite;
+}
+
+Texture Game::getTexture()
+{
+	return texture;
 }
 
 void Game::mainWindow()
@@ -114,13 +134,25 @@ void Game::gameWindow(RenderWindow& _window)
 
 	Event evnt2;
 
-	Player player1;
+	/*Card** oneCard; 
+	oneCard = new Card * [1];
+	oneCard[0] = new Card[1];
+    oneCard[0][0].setUrl("Deck/card_" + to_string(0) + "_" + to_string(0) + ".png");
+
+	Deck deckkk; 
+	deckkk.setCards(oneCard);
+
+	Player jugador; 
+	jugador.setDeck(deckkk);
+*/
+	Game game1; 
+	//game1.setPlayer(jugador);
 
 	srand(time(NULL));
 	int row = rand() % 8; int col = rand() % 14;
 
-	int* roW = player1.makeRandomVectorRowsForPlayers();
-	int* coL = player1.makeRandomVectorColumnsForPlayers();
+	int* roW = player.makeRandomVectorRowsForPlayers();
+	int* coL = player.makeRandomVectorColumnsForPlayers();
 
 
 	//Defining out of the while
@@ -136,14 +168,61 @@ void Game::gameWindow(RenderWindow& _window)
 
 		game.clear(Color::Red);
 
-		//drawSprites(game, deck);
-
-		player1.printHideCard(game);
-		player1.firstCard(game, row, col);
-
-		player1.drawPlayerDeck(game, roW, coL);
+		game1.printHideCard(game);
+		game1.firstCard(game, row, col);
+		game1.drawPlayerDeck(game, roW, coL);
 
 		game.display();
 	}
 
+}
+
+void Game::drawPlayerDeck(RenderWindow& _game, int* rows, int* cols)
+{
+	/*texture.loadFromFile("Deck/card_" + to_string(0) +
+		"_" + to_string(0) + ".png");
+	sprite.setTexture(texture);
+
+	sprite.setPosition(50, 500);
+	sprite.setScale(0.24f, 0.24f);
+
+	_game.draw(sprite);*/
+	for (int i = 0; i < 7; i++) {
+
+		texture.loadFromFile("Deck/card_" + to_string(rows[i]) +
+			"_" + to_string(cols[i]) + ".png");
+
+		sprite.setTexture(texture);
+
+		sprite.setPosition(50 + i * 75, 500);
+		sprite.setScale(0.24f, 0.24f);
+
+		_game.draw(sprite);
+	}
+
+}
+
+
+void Game::firstCard(RenderWindow& _game, int _row, int _col)
+{
+	//deck.setCards(_deck);
+
+	texture.loadFromFile("Deck/card_" + to_string(_row) + "_" + to_string(_col) + ".png");
+	sprite.setTexture(texture);// we get that position from the matrix
+
+	sprite.setPosition(510, 260);
+	sprite.setScale(0.25f, 0.25f);
+
+	_game.draw(sprite);
+}
+
+void Game::printHideCard(RenderWindow& _game)
+{
+	texture.loadFromFile("Deck/hideCard.png");
+
+	sprite.setTexture(texture);
+	sprite.setPosition(660, 260);
+	sprite.setScale(0.26f, 0.26f);
+
+	_game.draw(sprite);
 }

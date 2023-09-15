@@ -1,17 +1,17 @@
 #pragma once
-#include "Game.h"
+#include "Card.h"
 
 class Deck
 {
 private:
 	
-	Card** cards;// they have string with the url
+	Card** cards;// they have an string with the url
 	int amount;
 	
 public:
 
-	Deck() {};
-	Deck(Card** _cards, int _amount);
+	Deck();
+	//Deck(int _amount);
 	~Deck();
 
 	void setCards(Card** _cards);
