@@ -2,13 +2,19 @@
 
 Deck::Deck()
 {
-	cards = new Card*[8];
+	this->cards = new Card*[8];
 
 	for (int i = 0; i < 8; i++) {
 		cards[i] = NULL;
 	}
 
-	amount = 0;
+	this->amount = 0;
+}
+
+Deck::Deck(Card** _cards, int _amount)
+{
+	this->cards = _cards;
+	this->amount = _amount;
 }
 
 Deck::~Deck()
@@ -17,12 +23,12 @@ Deck::~Deck()
 
 void Deck::setCards(Card** _cards)
 {
-	cards = _cards;
+	this->cards = _cards;
 }
 
 void Deck::setAmount(int _amount)
 {
-	amount = _amount;
+	this->amount = _amount;
 }
 
 Card** Deck::getCards()

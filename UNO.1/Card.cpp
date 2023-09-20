@@ -2,25 +2,25 @@
 
 Card::Card(int _number, string _type, int _color, string _url)
 {
-	number = _number;
-	type = _type;
-	color = _color;
-	url = _url;
+	this->number = _number;
+	this->type = _type;
+	this->color = _color;
+	this->url = _url;
 }
 
 Card::Card(string _type, int _color, string _url)
 {
-	type = _type;
-	color = _color;
-	url = _url;
+	this->type = _type;
+	this->color = _color;
+	this->url = _url;
 }
 
 Card::Card()
 {
-	number = 0;
-	type = "";
-	color = 0;
-	url = "";
+	this->number = 0;
+	this->type = "";
+	this->color = 0;
+	this->url = "";
 
 }
 
@@ -30,22 +30,22 @@ Card::~Card()
 
 void Card::setNumber(int _number)
 {
-	number = _number;
+	this->number = _number;
 }
 
 void Card::setType(string _type)
 {
-	type = _type;
+	this->type = _type;
 }
 
 void Card::setColor(int _color)
 {
-	color = _color;
+	this->color = _color;
 }
 
 void Card::setUrl(string _url)
 {
-	url = _url;
+	this->url = _url;
 }
 
 int Card::getNumber()

@@ -5,10 +5,6 @@
 #include <SFML/Audio.hpp>
 #include <vector>
 
-//#include "Game.h"
-//#include "Deck.h"
-//#include "Player.h"
-
 using namespace sf;
 using namespace std;
 

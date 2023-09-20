@@ -1,5 +1,5 @@
 #pragma once
-//#include "Card.h"
+
 #include "Player.h"
 
 class Game
@@ -17,7 +17,7 @@ public:
 	Game(Player& _player);
 	~Game();
 
-	void setPlayer(Player _player);
+	void setPlayer(Player& _player);
 	void setSprite(Sprite& _sprite);
 	void setTexture(Texture& _texture);
 	
@@ -25,7 +25,8 @@ public:
 	Sprite getSprite();
 	Texture getTexture();
 
-	void drawPlayerDeck(RenderWindow& _game, int* rows, int* cols);
+	void drawPlayerDeck(RenderWindow& _game, int* rows, int* cols, Player& _player);
+	void drawPlayerTwoDeck(RenderWindow& _game, int* rows, int* cols, Player& _player);
 	void firstCard(RenderWindow& _game, int _row, int _col);
 	void printHideCard(RenderWindow& _game);
 	

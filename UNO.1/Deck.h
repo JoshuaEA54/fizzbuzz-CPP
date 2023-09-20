@@ -11,7 +11,7 @@ private:
 public:
 
 	Deck();
-	//Deck(int _amount);
+	Deck(Card** _cards,int _amount);
 	~Deck();
 
 	void setCards(Card** _cards);

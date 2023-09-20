@@ -1,12 +1,12 @@
 #pragma once
-//#include "Card.h"
+
 #include "Deck.h"
 
 class Player {
 private:
 
 	 Deck deck;
-	 Deck deckOfPlayer;
+	
 
 public:
 
@@ -15,6 +15,7 @@ public:
 	~Player();
 
 	void setDeck(Deck& _deck);
+	void setDeck(int* rows, int* cols);// metodo de inicio
 	
     Deck getDeck();
 	
