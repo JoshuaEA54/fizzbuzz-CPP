@@ -10,6 +10,7 @@ private:
 
 	Sprite sprite;
 	Texture texture;
+
 	
 public:
 
@@ -29,6 +30,7 @@ public:
 	void drawPlayerTwoDeck(RenderWindow& _game, int* rows, int* cols, Player& _player);
 	void firstCard(RenderWindow& _game, int _row, int _col);
 	void printHideCard(RenderWindow& _game);
+	Sprite spriteOfHideCard();
 	
 
 	void mainWindow();

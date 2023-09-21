@@ -135,7 +135,7 @@ void Game::gameWindow(RenderWindow& _window)
 	Event evnt2;
 
 	Game game1; Player player1; Player player2;
-	
+
 
 	srand(time(NULL));
 	int row = rand() % 8;
@@ -146,6 +146,7 @@ void Game::gameWindow(RenderWindow& _window)
 	int* row3 = player.makeRandomVectorRowsForPlayers();
 	int* col3 = player.makeRandomVectorColumnsForPlayers();
 
+
 	//Defining out of the while
 	while (game.isOpen()) {
 
@@ -154,19 +155,31 @@ void Game::gameWindow(RenderWindow& _window)
 			if (evnt2.type == Event::Closed) {
 				game.close();
 			}
+			if (evnt2.type == Event::MouseButtonPressed && evnt2.mouseButton.button == Mouse::Left) {
+				//transform coordenates of mouse to the window 	
+				Vector2f mousePosition = game.mapPixelToCoords(Mouse::getPosition(game));
+					
+				if (spriteOfHideCard().getGlobalBounds().contains(mousePosition)) {
+					cout << " sprite of hide card";
+					// //agregar una carta random de la matriz de cartas a la baraja 
+					// 		
+					// game1.addCard(player1); 		
+					// //el deck del player aumenta 	}
+				}
+				
+			}
 
+			game.clear(Color::Red);
+
+			game1.printHideCard(game);
+			game1.firstCard(game, row, col);
+			game1.drawPlayerDeck(game, row2, col2, player1);
+			game1.drawPlayerTwoDeck(game, row3, col3, player2);
+
+			game.display();
 		}
 
-		game.clear(Color::Red);
-
-		game1.printHideCard(game);
-		game1.firstCard(game, row, col);
-		game1.drawPlayerDeck(game, row2, col2,player1);
-		game1.drawPlayerTwoDeck(game, row3, col3, player2);
-
-		game.display();
 	}
-
 }
 
 void Game::drawPlayerDeck(RenderWindow& _game, int* rows, int* cols ,Player& _player)
@@ -230,11 +243,23 @@ void Game::printHideCard(RenderWindow& _game)
 	sprite.setPosition(660, 260);
 	sprite.setScale(0.26f, 0.26f);
 
-	Vector2f spritePosition = sprite.getPosition();// gets the position of the image
-	
-	Vector2f windowCoords = _game.mapPixelToCoords(Vector2i(spritePosition.x, spritePosition.y));
+	//Vector2f spritePosition = sprite.getPosition();// gets the position of the image
+	//
+	//Vector2f windowCoords = _game.mapPixelToCoords(Vector2i(spritePosition.x, spritePosition.y));
 
 	//cout << "Coordenadas de ventana: (" << windowCoords.x << ", " << windowCoords.y << ")" << endl;
 
 	_game.draw(sprite);
+}
+
+Sprite Game::spriteOfHideCard()
+{
+	texture.loadFromFile("Deck/hideCard.png");
+
+	sprite.setTexture(texture);
+	//                  x    y
+	sprite.setPosition(660, 260);
+	sprite.setScale(0.26f, 0.26f);
+
+	return sprite;
 }
