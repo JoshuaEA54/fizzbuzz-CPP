@@ -8,12 +8,12 @@
 //	this->url = _url;
 //}
 
-Card::Card(string _type, int _color, string _url)
-{
-	this->type = _type;
-	this->color = _color;
-	this->url = _url;
-}
+//Card::Card(string _type, int _color, string _url)
+//{
+//	this->type = _type;
+//	this->color = _color;
+//	this->url = _url;
+//}
 
 Card::Card()
 {
