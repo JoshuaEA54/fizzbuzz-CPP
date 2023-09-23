@@ -136,15 +136,17 @@ void Game::gameWindow(RenderWindow& _window)
 
 	Game game1; Player player1; Player player2;
 
+	int sizePlayer1 = 7;
+	int sizePlayer2 = 7;
 
 	srand(time(NULL));
 	int row = rand() % 8;
 	int col = rand() % 14;
 
-	int* row2 = player.makeRandomVectorRowsForPlayers();
-	int* col2 = player.makeRandomVectorColumnsForPlayers();
-	int* row3 = player.makeRandomVectorRowsForPlayers();
-	int* col3 = player.makeRandomVectorColumnsForPlayers();
+	int* rowP1 = player.makeRandomVectorRowsForPlayers(sizePlayer1);
+	int* colP1 = player.makeRandomVectorColumnsForPlayers(sizePlayer1);
+	int* rowP2 = player.makeRandomVectorRowsForPlayers(sizePlayer2);
+	int* colP2 = player.makeRandomVectorColumnsForPlayers(sizePlayer2);
 
 
 	//Defining out of the while
@@ -155,16 +157,17 @@ void Game::gameWindow(RenderWindow& _window)
 			if (evnt2.type == Event::Closed) {
 				game.close();
 			}
-			if (evnt2.type == Event::MouseButtonPressed && evnt2.mouseButton.button == Mouse::Left) {
+			if (evnt2.type == Event::MouseButtonReleased && evnt2.mouseButton.button == Mouse::Left) {
 				//transform coordenates of mouse to the window 	
 				Vector2f mousePosition = game.mapPixelToCoords(Mouse::getPosition(game));
 					
 				if (spriteOfHideCard().getGlobalBounds().contains(mousePosition)) {
-					cout << " sprite of hide card";
-					// //agregar una carta random de la matriz de cartas a la baraja 
-					// 		
-					// game1.addCard(player1); 		
-					// //el deck del player aumenta 	}
+
+					rowP1 = player.addRowInVectorOfPlayer(rowP1,sizePlayer1);
+					colP1 = player.addColumnInVectorOfPlayer(colP1, sizePlayer1);// we add a new image
+
+                    sizePlayer1 += 1; // we increase the size of the vector of cards
+					
 				}
 				
 			}
@@ -173,8 +176,8 @@ void Game::gameWindow(RenderWindow& _window)
 
 			game1.printHideCard(game);
 			game1.firstCard(game, row, col);
-			game1.drawPlayerDeck(game, row2, col2, player1);
-			game1.drawPlayerTwoDeck(game, row3, col3, player2);
+			game1.drawPlayerDeck(game, rowP1, colP1, player1,sizePlayer1);
+			game1.drawPlayerTwoDeck(game, rowP2, colP2, player2, sizePlayer2);
 
 			game.display();
 		}
@@ -182,18 +185,18 @@ void Game::gameWindow(RenderWindow& _window)
 	}
 }
 
-void Game::drawPlayerDeck(RenderWindow& _game, int* rows, int* cols ,Player& _player)
+void Game::drawPlayerDeck(RenderWindow& _game, int* rows, int* cols ,Player& _player,int _size)
 {	
 
-	_player.setDeck(rows, cols);
+	_player.setDeck(rows, cols,_size);
 
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < _size; i++) {
 
 		texture.loadFromFile(_player.getDeck().getCards()[0][i].getUrl());
 
 		sprite.setTexture(texture);
 
-		sprite.setPosition(50 + i * 75, 500);
+		sprite.setPosition(50.0f + i * 75.0f, 500.0f);
 		sprite.setScale(0.24f, 0.24f);
 
 		_game.draw(sprite);
@@ -202,17 +205,17 @@ void Game::drawPlayerDeck(RenderWindow& _game, int* rows, int* cols ,Player& _pl
 
 }
 
-void Game::drawPlayerTwoDeck(RenderWindow& _game, int* rows, int* cols, Player& _player)
+void Game::drawPlayerTwoDeck(RenderWindow& _game, int* rows, int* cols, Player& _player, int _size)
 {
-	_player.setDeck(rows, cols);
+	_player.setDeck(rows, cols,_size);
 
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < _size; i++) {
 
 		texture.loadFromFile(_player.getDeck().getCards()[0][i].getUrl());
 
 		sprite.setTexture(texture);
 
-		sprite.setPosition(50 + i * 75, 30);
+		sprite.setPosition(50.0f + i * 75.0f, 30.0f);
 		sprite.setScale(0.24f, 0.24f);
 
 		_game.draw(sprite);
@@ -236,20 +239,7 @@ void Game::firstCard(RenderWindow& _game, int _row, int _col)
 
 void Game::printHideCard(RenderWindow& _game)
 {
-	texture.loadFromFile("Deck/hideCard.png");
-
-	sprite.setTexture(texture);
-	//                  x    y
-	sprite.setPosition(660, 260);
-	sprite.setScale(0.26f, 0.26f);
-
-	//Vector2f spritePosition = sprite.getPosition();// gets the position of the image
-	//
-	//Vector2f windowCoords = _game.mapPixelToCoords(Vector2i(spritePosition.x, spritePosition.y));
-
-	//cout << "Coordenadas de ventana: (" << windowCoords.x << ", " << windowCoords.y << ")" << endl;
-
-	_game.draw(sprite);
+	_game.draw(spriteOfHideCard());
 }
 
 Sprite Game::spriteOfHideCard()

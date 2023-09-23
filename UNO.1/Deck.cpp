@@ -58,7 +58,7 @@ Card** Deck::fulldeckk()
 
 		for (int j = 0; j < 10; j++) {
 			cards[i][j] = Card(j, "normal", x, "Deck/card_" + to_string(i) + "_" + to_string(j) + ".png");
-			cout << cards[i][j].getUrl() << endl;
+			//cout << cards[i][j].getUrl() << endl;
 		}
 
 	}

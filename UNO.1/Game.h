@@ -26,8 +26,8 @@ public:
 	Sprite getSprite();
 	Texture getTexture();
 
-	void drawPlayerDeck(RenderWindow& _game, int* rows, int* cols, Player& _player);
-	void drawPlayerTwoDeck(RenderWindow& _game, int* rows, int* cols, Player& _player);
+	void drawPlayerDeck(RenderWindow& _game, int* rows, int* cols, Player& _player, int _size);
+	void drawPlayerTwoDeck(RenderWindow& _game, int* rows, int* cols, Player& _player, int _size);
 	void firstCard(RenderWindow& _game, int _row, int _col);
 	void printHideCard(RenderWindow& _game);
 	Sprite spriteOfHideCard();

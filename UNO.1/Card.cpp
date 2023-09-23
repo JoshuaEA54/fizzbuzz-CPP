@@ -1,19 +1,19 @@
 #include "Card.h"
 
-//Card::Card(int _number, string _type, int _color, string _url)
-//{
-//	this->number = _number;
-//	this->type = _type;
-//	this->color = _color;
-//	this->url = _url;
-//}
+Card::Card(int _number, string _type, int _color, string _url)
+{
+	this->number = _number;
+	this->type = _type;
+	this->color = _color;
+	this->url = _url;
+}
 
-//Card::Card(string _type, int _color, string _url)
-//{
-//	this->type = _type;
-//	this->color = _color;
-//	this->url = _url;
-//}
+Card::Card(string _type, int _color, string _url)
+{
+	this->type = _type;
+	this->color = _color;
+	this->url = _url;
+}
 
 Card::Card()
 {
@@ -117,13 +117,3 @@ int Card::defineColor(int _variable, int& _x, Card& _aux)
 
 	return _x;
 }
-
-
-
-
-
-
-
-
-
-

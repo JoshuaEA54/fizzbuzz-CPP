@@ -14,21 +14,22 @@ void Player::setDeck(Deck& _deck)
 	this->deck = _deck;
 }
 
-void Player::setDeck(int* rows, int* cols)
+void Player::setDeck(int* rows, int* cols,int _size)
 {
-	Card** card;
+	
+	Card** deckOfPlayer;
 
-	card = new Card * [1];
-	card[0] = new Card[7];
+	deckOfPlayer = new Card * [1];
+	deckOfPlayer[0] = new Card[_size];
 
-	for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < _size; i++) {
 
-		card[0][i].setUrl("Deck/card_" + to_string(rows[i]) +
-			"_" + to_string(cols[i]) + ".png");
-
+		deckOfPlayer[0][i].setUrl(deck.fulldeckk()[rows[i]][cols[i]].getUrl());
+		//agarra los strings del mazo ya definido de cartas
+		
 	}
 
-	 this->deck = Deck(card, 7);
+	 this->deck = Deck(deckOfPlayer, _size);
 
 	
 }
@@ -39,28 +40,51 @@ Deck Player::getDeck()
 }
 
 
-int* Player::makeRandomVectorColumnsForPlayers()
+int* Player::makeRandomVectorColumnsForPlayers(int _size)
 {
-	int* colVector = new int[7];
-	int col = 0;
+	int* colVector = new int[_size];
+	int random = 0;
 
-	for (int i = 0; i < 7; i++) {
-		col = rand() % 14;
-		colVector[i] = col;
+	for (int i = 0; i < _size; i++) {
+		random = rand() % 14;
+		colVector[i] = random;
 	}
 	return colVector;
 }
 
-int* Player::makeRandomVectorRowsForPlayers()
+int* Player::makeRandomVectorRowsForPlayers(int _size)
 {
-	int* rowVector = new int[7];
-	int row = 0;
+	int* rowVector = new int[_size];
+	int random = 0;
 
-	for (int i = 0; i < 7; i++) {
-		row = rand() % 8;
-		rowVector[i] = row;
+	for (int i = 0; i < _size; i++) {
+		random = rand() % 8;
+		rowVector[i] = random;
 
 	}
 	return rowVector;
 }
 
+int* Player::addRowInVectorOfPlayer(int* _vector, int _size)
+{
+	int* temporalVector = new int[_size + 1];
+
+	temporalVector = _vector;// last position empty
+
+	int random = rand() % 8;
+	temporalVector[_size] = random;
+
+	return temporalVector;
+}
+
+int* Player::addColumnInVectorOfPlayer(int* _vector, int _size)
+{
+	int* temporalVector = new int[_size + 1];
+
+	temporalVector = _vector;// last position empty
+
+	int random = rand() % 14;
+	temporalVector[_size] = random; // last position filled
+
+	return temporalVector;
+}
