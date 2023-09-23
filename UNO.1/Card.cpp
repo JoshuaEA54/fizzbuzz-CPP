@@ -117,13 +117,3 @@ int Card::defineColor(int _variable, int& _x, Card& _aux)
 
 	return _x;
 }
-
-
-
-
-
-
-
-
-
-
