@@ -46,9 +46,9 @@ void Game::mainWindow()
 	RenderWindow window;
 	window.create(VideoMode(1366, 768), "UNO", Style::Default);
 
-	Music music;
+	/*Music music;
 	music.openFromFile("UNO 2K17 Full Music Album.ogg");
-	music.play();
+	music.play();*/
 
 	// Cargar una imagen desde un archivo
 	Texture texture;
@@ -148,6 +148,7 @@ void Game::gameWindow(RenderWindow& _window)
 	int* rowP2 = player.makeRandomVectorRowsForPlayers(sizePlayer2);
 	int* colP2 = player.makeRandomVectorColumnsForPlayers(sizePlayer2);
 
+	bool turns = true;
 
 	//Defining out of the while
 	while (game.isOpen()) {
@@ -161,14 +162,7 @@ void Game::gameWindow(RenderWindow& _window)
 				//transform coordenates of mouse to the window 	
 				Vector2f mousePosition = game.mapPixelToCoords(Mouse::getPosition(game));
 					
-				if (spriteOfHideCard().getGlobalBounds().contains(mousePosition)) {
-
-					rowP1 = player.addRowInVectorOfPlayer(rowP1,sizePlayer1);
-					colP1 = player.addColumnInVectorOfPlayer(colP1, sizePlayer1);// we add a new image
-
-                    sizePlayer1 += 1; // we increase the size of the vector of cards
-					
-				}
+				addCardOnPlayerDeck(mousePosition, turns, sizePlayer1, rowP1, colP1, sizePlayer2, rowP2, player2, colP2);
 				
 			}
 
@@ -176,8 +170,13 @@ void Game::gameWindow(RenderWindow& _window)
 
 			game1.printHideCard(game);
 			game1.firstCard(game, row, col);
+
+			game1.deckOfPlayer(player1, rowP1, colP1, sizePlayer1);
 			game1.drawPlayerDeck(game, rowP1, colP1, player1,sizePlayer1);
+
+			game1.deckOfPlayer(player2, rowP2, colP2, sizePlayer2);
 			game1.drawPlayerTwoDeck(game, rowP2, colP2, player2, sizePlayer2);
+
 
 			game.display();
 		}
@@ -185,9 +184,39 @@ void Game::gameWindow(RenderWindow& _window)
 	}
 }
 
+void Game::addCardOnPlayerDeck(Vector2f& mousePosition, bool& turns, int& sizePlayer1, int* rowP1, int* colP1, int& sizePlayer2, int* rowP2, Player& player2, int* colP2)
+{
+	if (spriteOfHideCard().getGlobalBounds().contains(mousePosition)) {
+
+		if (turns) {
+
+			turns = false;
+
+			if (sizePlayer1 < 20) {
+
+				rowP1 = player.addRowInVectorOfPlayer(rowP1, sizePlayer1);
+				colP1 = player.addColumnInVectorOfPlayer(colP1, sizePlayer1);// we add a new image
+
+				sizePlayer1 += 1; // we increase the size of the vector of cards
+			}
+		}
+		else {
+			turns = true;
+
+			if (sizePlayer2 < 20) {
+
+				rowP2 = player2.addRowInVectorOfPlayer(rowP2, sizePlayer2);
+
+				colP2 = player2.addColumnInVectorOfPlayer(colP2, sizePlayer2);// we add a new image
+
+				sizePlayer2 += 1; // we increase the size of the vector of cards
+			}
+		}
+	}
+}
+
 void Game::drawPlayerDeck(RenderWindow& _game, int* rows, int* cols ,Player& _player,int _size)
 {	
-
 	_player.setDeck(rows, cols,_size);
 
 	for (int i = 0; i < _size; i++) {
@@ -196,7 +225,7 @@ void Game::drawPlayerDeck(RenderWindow& _game, int* rows, int* cols ,Player& _pl
 
 		sprite.setTexture(texture);
 
-		sprite.setPosition(50.0f + i * 75.0f, 500.0f);
+		sprite.setPosition(50.0f + i * 60.0f, 500.0f);
 		sprite.setScale(0.24f, 0.24f);
 
 		_game.draw(sprite);
@@ -215,7 +244,7 @@ void Game::drawPlayerTwoDeck(RenderWindow& _game, int* rows, int* cols, Player& 
 
 		sprite.setTexture(texture);
 
-		sprite.setPosition(50.0f + i * 75.0f, 30.0f);
+		sprite.setPosition(50.0f + i * 60.0f, 30.0f);
 		sprite.setScale(0.24f, 0.24f);
 
 		_game.draw(sprite);
@@ -223,6 +252,10 @@ void Game::drawPlayerTwoDeck(RenderWindow& _game, int* rows, int* cols, Player& 
 	}
 }
 
+void Game::deckOfPlayer(Player& _player, int* rowP, int* colP, int _size)
+{
+	_player.setDeck(rowP, colP, _size);
+}
 
 void Game::firstCard(RenderWindow& _game, int _row, int _col)
 {
