@@ -197,6 +197,8 @@ void Game::gameWindow(RenderWindow& _window)
 		}
 
 	}
+
+	//delete[] spritesOfPlayer1, spritesOfPlayer2, rowP1, rowP2, colP1, colP2;
 }
 
 void Game::addCardOnPlayerDeck(Vector2f& mousePosition, bool& turns, int& sizePlayer1, int* rowP1, int* colP1, int& sizePlayer2, int* rowP2, Player& player2, int* colP2)
@@ -230,11 +232,9 @@ void Game::addCardOnPlayerDeck(Vector2f& mousePosition, bool& turns, int& sizePl
 	}
 }
 
-void Game::drawPlayerDeck(RenderWindow& _game,Player& _player,int _size, Sprite* spritesOfPlayer)
+void Game::drawPlayerDeck(RenderWindow& _game,Player& _player,int _size, Sprite*& spritesOfPlayer)
 {	
-	Sprite* auxSprites = new Sprite[_size];
-	
-
+	 Sprite* auxSprites = new Sprite[_size];
 	for (int i = 0; i < _size; i++) {
 
 		texture.loadFromFile(_player.getDeck().getCards()[0][i].getUrl());
@@ -244,14 +244,13 @@ void Game::drawPlayerDeck(RenderWindow& _game,Player& _player,int _size, Sprite*
 		sprite.setPosition(50.0f + i * 60.0f, 500.0f);
 		sprite.setScale(0.24f, 0.24f);
 
-		auxSprites[i] = sprite;
-		
-		
-        _game.draw(sprite);
+         _game.draw(sprite);
 
+		 auxSprites[i] = sprite;
 	}
-	
 	 spritesOfPlayer = auxSprites;
+   
+	
 	
 }
 
