@@ -16,7 +16,6 @@ void Player::setDeck(Deck& _deck)
 
 void Player::setDeck(int* rows, int* cols,int _size)
 {
-	
 	Card** deckOfPlayer;
 
 	deckOfPlayer = new Card * [1];
@@ -28,10 +27,8 @@ void Player::setDeck(int* rows, int* cols,int _size)
 		//agarra los strings del mazo ya definido de cartas
 		
 	}
-
 	 this->deck = Deck(deckOfPlayer, _size);
 
-	
 }
 
 Deck Player::getDeck()
@@ -60,8 +57,10 @@ int* Player::makeRandomVectorRowsForPlayers(int _size)
 	for (int i = 0; i < _size; i++) {
 		random = rand() % 8;
 		rowVector[i] = random;
+		
 
 	}
+	
 	return rowVector;
 }
 
@@ -74,6 +73,7 @@ int* Player::addRowInVectorOfPlayer(int* _vector, int _size)
 	int random = rand() % 8;
 	temporalVector[_size] = random;
 
+	
 	return temporalVector;
 }
 
