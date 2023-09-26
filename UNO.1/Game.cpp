@@ -131,7 +131,7 @@ void Game::gameWindow(RenderWindow& _window)
 	//second window
 	RenderWindow windowGame;
 	windowGame.create(VideoMode(1366, 768), "UNO", Style::Default);
-    
+
 	Event evnt2;
 
 	Game game1; Player player1; Player player2;
@@ -167,86 +167,137 @@ void Game::gameWindow(RenderWindow& _window)
 				windowGame.close();
 			}
 			if (evnt2.type == Event::MouseButtonPressed && evnt2.mouseButton.button == Mouse::Left) {
-				
+
 				//transform coordenates of mouse to the window 	
 				Vector2f mousePosition = windowGame.mapPixelToCoords(Mouse::getPosition(windowGame));
-				
-				addCardOnPlayerDeck(mousePosition, turns, sizePlayer1, rowP1, colP1, sizePlayer2, rowP2, player2, colP2);
-				
 
-				for (int i = 0; i < sizePlayer1; i++) {
-					// this "if" takes into account that the cards are above each one of them
-
-					if (spritesOfPlayer1[i].getGlobalBounds().contains(mousePosition) && 
-						spritesOfPlayer1[i + 1].getGlobalBounds().contains(mousePosition) && (i != 0 || i != sizePlayer1-1)){ 
-
-							sizePill++;
-							if (i == sizePlayer1 - 1) {
-                               urlOfCardAdded = player1.getDeck().getCards()[0][i].getUrl();
-							}
-							else {
-								urlOfCardAdded = player1.getDeck().getCards()[0][i + 1].getUrl();
-							}
-							firstCard = true;
-							cout << " if 1" << endl;
-						
-						//cout << " entro a la carta" << i + 2 << endl;
-					}                                                                                     //i=sizeplayer-1                                                       
-					else if ((i == 0 && spritesOfPlayer1[0].getGlobalBounds().contains(mousePosition)) || (i == sizePlayer1-2 && spritesOfPlayer1[sizePlayer1 - 1].getGlobalBounds().contains(mousePosition))) {
-						cout << "if 2" << endl;
-
-						//cout << " entro a la carta" << i + 1 << endl;
-					}
+				if (turns == true) {
+					addCardOnPlayerOneDeck(mousePosition, sizePlayer1, rowP1, colP1, player1);
+					throwCardPlayer1(sizePlayer1, spritesOfPlayer1, mousePosition, sizePill, urlOfCardAdded, player1, firstCard, turns);
+				}
+				else {//changes turn
+					addCardOnPlayerTwoDeck(mousePosition, sizePlayer2, rowP2, colP2, player2);
+					throwCardPlayer2(sizePlayer2, spritesOfPlayer2, mousePosition, sizePill, urlOfCardAdded, player2, firstCard, turns);
 				}
 			}
 
-			windowGame.clear(Color::Red);
-           
-			game1.printHideCard(windowGame);
-			game1.drawPillDeck(windowGame, row, col,urlOfCardAdded,sizePill,firstCard);
-        
-			game1.deckOfPlayer(player1, rowP1, colP1, sizePlayer1);
-			game1.drawPlayerDeck(windowGame, player1,sizePlayer1, spritesOfPlayer1);
-
-			game1.deckOfPlayer(player2, rowP2, colP2, sizePlayer2);
-			game1.drawPlayerTwoDeck(windowGame, player2, sizePlayer2);
-
-			windowGame.display();
 		}
 
+		windowGame.clear(Color::Red);
+
+		game1.printHideCard(windowGame);
+		game1.drawPillDeck(windowGame, row, col, urlOfCardAdded, sizePill, firstCard);
+
+		game1.deckOfPlayer(player1, rowP1, colP1, sizePlayer1);
+		game1.drawPlayerDeck(windowGame, player1, sizePlayer1, spritesOfPlayer1);
+
+		game1.deckOfPlayer(player2, rowP2, colP2, sizePlayer2);
+		game1.drawPlayerTwoDeck(windowGame, player2, sizePlayer2, spritesOfPlayer2);
+
+		windowGame.display();
 	}
 
-	delete[] spritesOfPlayer1, spritesOfPlayer2, rowP1, rowP2, colP1, colP2;
+delete[] spritesOfPlayer1, spritesOfPlayer2, rowP1, rowP2, colP1, colP2;
 }
 
-void Game::addCardOnPlayerDeck(Vector2f& mousePosition, bool& turns, int& sizePlayer1, int* rowP1, int* colP1, int& sizePlayer2, int* rowP2, Player& player2, int* colP2)
+void Game::throwCardPlayer1(int sizePlayer1, Sprite* spritesOfPlayer1, Vector2f& mousePosition, int& sizePill, String& urlOfCardAdded, Player& player1, bool& firstCard,bool& turns)
+{
+	for (int i = 0; i < sizePlayer1; i++) {
+		// this "if" takes into account that the cards are above each one of them
+
+		if (spritesOfPlayer1[i].getGlobalBounds().contains(mousePosition) &&
+			spritesOfPlayer1[i + 1].getGlobalBounds().contains(mousePosition) && (i != 0 || i != sizePlayer1 - 1)) {
+
+			sizePill++;
+			if (i == sizePlayer1 - 1) {
+				urlOfCardAdded = player1.getDeck().getCards()[0][i].getUrl();
+			}
+			else {
+				urlOfCardAdded = player1.getDeck().getCards()[0][i + 1].getUrl();
+			}
+			firstCard = true;
+			turns = false;
+			//cout << " if 1" << endl;
+			
+		}                                                                                     //i=sizeplayer-1                                                       
+		else if ((i == 0 && spritesOfPlayer1[0].getGlobalBounds().contains(mousePosition)) || (i == sizePlayer1 - 2 && spritesOfPlayer1[sizePlayer1 - 1].getGlobalBounds().contains(mousePosition))) {
+
+			sizePill++;
+			if (i == sizePlayer1 - 2) {
+				urlOfCardAdded = player1.getDeck().getCards()[0][i + 1].getUrl();// the last card
+			}
+			else {
+				urlOfCardAdded = player1.getDeck().getCards()[0][i].getUrl();//the first card
+			}
+			firstCard = true;
+			turns = false;
+			//cout << "if 2" << endl;
+			
+		}
+	}
+}
+
+void Game::throwCardPlayer2(int sizePlayer2, Sprite* spritesOfPlayer2, Vector2f& mousePosition, int& sizePill, String& urlOfCardAdded, Player& player2, bool& firstCard, bool& turns)
+{
+	for (int i = 0; i < sizePlayer2; i++) {
+		// this "if" takes into account that the cards are above each one of them
+
+		if (spritesOfPlayer2[i].getGlobalBounds().contains(mousePosition) &&
+			spritesOfPlayer2[i + 1].getGlobalBounds().contains(mousePosition) && (i != 0 || i != sizePlayer2 - 1)) {
+
+			sizePill++;
+			if (i == sizePlayer2 - 1) {
+				urlOfCardAdded = player2.getDeck().getCards()[0][i].getUrl();
+			}
+			else {
+				urlOfCardAdded = player2.getDeck().getCards()[0][i + 1].getUrl();
+			}
+			firstCard = true;
+			turns = true;
+			
+		}                                                                                     //i=sizeplayer-1                                                       
+		else if ((i == 0 && spritesOfPlayer2[0].getGlobalBounds().contains(mousePosition)) || (i == sizePlayer2 - 2 && spritesOfPlayer2[sizePlayer2 - 1].getGlobalBounds().contains(mousePosition))) {
+
+			sizePill++;
+			if (i == sizePlayer2 - 2) {
+				urlOfCardAdded = player2.getDeck().getCards()[0][i + 1].getUrl();// the last card
+			}
+			else {
+				urlOfCardAdded = player2.getDeck().getCards()[0][i].getUrl();//the first card
+			}
+			firstCard = true;
+			turns = true;
+			
+		}
+	}
+}
+
+void Game::addCardOnPlayerOneDeck(Vector2f& mousePosition, int& sizePlayer1, int* rowP1, int* colP1,Player& _player1)
 {
 	if (spriteOfHideCard().getGlobalBounds().contains(mousePosition)) {
 
-		if (turns) {
-
-			turns = false;
-
 			if (sizePlayer1 < 20) {
 
-				rowP1 = player.addRowInVectorOfPlayer(rowP1, sizePlayer1);
-				colP1 = player.addColumnInVectorOfPlayer(colP1, sizePlayer1);// we add a new image
+				rowP1 = _player1.addRowInVectorOfPlayer(rowP1, sizePlayer1);
+				colP1 = _player1.addColumnInVectorOfPlayer(colP1, sizePlayer1);// we add a new image
 
 				sizePlayer1 += 1; // we increase the size of the vector of cards
 			}
-		}
-		else {
-			turns = true;
+		
+	}
+}
 
-			if (sizePlayer2 < 20) {
+void Game::addCardOnPlayerTwoDeck(Vector2f& mousePosition, int& sizePlayer2, int* rowP2, int* colP2, Player& _player2)
+{
+	if (spriteOfHideCard().getGlobalBounds().contains(mousePosition)) {
+		if (sizePlayer2 < 20) {
 
-				rowP2 = player2.addRowInVectorOfPlayer(rowP2, sizePlayer2);
+			  	rowP2 = _player2.addRowInVectorOfPlayer(rowP2, sizePlayer2);
 
-				colP2 = player2.addColumnInVectorOfPlayer(colP2, sizePlayer2);// we add a new image
+			   	colP2 = _player2.addColumnInVectorOfPlayer(colP2, sizePlayer2);// we add a new image
 
-				sizePlayer2 += 1; // we increase the size of the vector of cards
-			}
-		}
+			   	sizePlayer2 += 1; // we increase the size of the vector of cards
+			   }
 	}
 }
 
@@ -276,7 +327,7 @@ void Game::drawPlayerDeck(RenderWindow& _game,Player& _player,int _size, Sprite*
         
 }
 
-void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int _size)
+void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int _size, Sprite*& spritesOfPlayer)
 {
 
 	for (int i = 0; i < _size; i++) {
@@ -288,7 +339,16 @@ void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int _size)
 		sprite.setPosition(50.0f + i * 60.0f, 30.0f);
 		sprite.setScale(0.24f, 0.24f);
 
-		_game.draw(sprite);
+		//_game.draw(sprite);
+
+		if (i < 7) {
+			spritesOfPlayer[i] = sprite;
+		}
+		else {
+			addSprite(spritesOfPlayer, sprite, _size);
+		}
+
+		_game.draw(spritesOfPlayer[i]);
 
 	}
 }
