@@ -181,21 +181,20 @@ void Game::gameWindow(RenderWindow& _window)
 						spritesOfPlayer1[i + 1].getGlobalBounds().contains(mousePosition) && (i != 0 || i != sizePlayer1-1)){ 
 
 							sizePill++;
-							urlOfCardAdded = player1.getDeck().getCards()[0][i+1].getUrl();
-							cout << player1.getDeck().getCards()[0][i+1].getUrl() << endl;
+							if (i == sizePlayer1 - 1) {
+                               urlOfCardAdded = player1.getDeck().getCards()[0][i].getUrl();
+							}
+							else {
+								urlOfCardAdded = player1.getDeck().getCards()[0][i + 1].getUrl();
+							}
 							firstCard = true;
-						
-						
-							//sizePill++;
-							//urlOfCardAdded = player1.getDeck().getCards()[0][i].getUrl();
-							//cout << "2" << endl;
-							////cout << player1.getDeck().getCards()[0][i].getUrl() << endl;
-							//firstCard = true;
+							cout << " if 1" << endl;
 						
 						//cout << " entro a la carta" << i + 2 << endl;
 					}                                                                                     //i=sizeplayer-1                                                       
 					else if ((i == 0 && spritesOfPlayer1[0].getGlobalBounds().contains(mousePosition)) || (i == sizePlayer1-2 && spritesOfPlayer1[sizePlayer1 - 1].getGlobalBounds().contains(mousePosition))) {
 						cout << "if 2" << endl;
+
 						//cout << " entro a la carta" << i + 1 << endl;
 					}
 				}
