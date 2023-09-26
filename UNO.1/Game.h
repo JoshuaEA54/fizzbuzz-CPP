@@ -30,7 +30,7 @@ public:
 	void drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int _size);
 	void deckOfPlayer(Player& _player, int* rows, int* cols, int _size);
 
-	void drawPillDeck(RenderWindow& _game, int _row, int _col, Sprite*& spritesPill,int sizePill, bool firstCard);
+	void drawPillDeck(RenderWindow& _game, int _row, int _col, string urlOfCardAdded,int sizePill, bool firstCard);
 	void printHideCard(RenderWindow& _game);
 	Sprite spriteOfHideCard();
 	Sprite* addSprite(Sprite*& spritesPill,Sprite& _sprite, int _size);
