@@ -67,9 +67,9 @@ int* Player::makeRandomVectorRowsForPlayers(int _size)
 int* Player::addRowInVectorOfPlayer(int* _vector, int _size)
 {
 	int* temporalVector = new int[_size + 1];
-
-	temporalVector = _vector;// last position empty
-
+	for (int i = 0; i < _size; i++) {
+		temporalVector = _vector;// last position empty
+	}
 	int random = rand() % 8;
 	temporalVector[_size] = random;
 
@@ -80,9 +80,9 @@ int* Player::addRowInVectorOfPlayer(int* _vector, int _size)
 int* Player::addColumnInVectorOfPlayer(int* _vector, int _size)
 {
 	int* temporalVector = new int[_size + 1];
-
-	temporalVector = _vector;// last position empty
-
+	for (int i = 0; i < _size; i++) {
+		temporalVector = _vector;// last position empty
+	}
 	int random = rand() % 14;
 	temporalVector[_size] = random; // last position filled
 

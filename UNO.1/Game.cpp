@@ -151,10 +151,13 @@ void Game::gameWindow(RenderWindow& _window)
 
 	int* rowP1 = player1.makeRandomVectorRowsForPlayers(sizePlayer1);
 	int* colP1 = player1.makeRandomVectorColumnsForPlayers(sizePlayer1);
+
 	int* rowP2 = player2.makeRandomVectorRowsForPlayers(sizePlayer2);
 	int* colP2 = player2.makeRandomVectorColumnsForPlayers(sizePlayer2);
 
 	bool turns = true, firstCard = false;
+
+	//Sprite test;
 
 	//Defining out of the while
 	while (windowGame.isOpen()) {
@@ -168,17 +171,22 @@ void Game::gameWindow(RenderWindow& _window)
 				
 				//transform coordenates of mouse to the window 	
 				Vector2f mousePosition = windowGame.mapPixelToCoords(Mouse::getPosition(windowGame));
-					
+				
 				addCardOnPlayerDeck(mousePosition, turns, sizePlayer1, rowP1, colP1, sizePlayer2, rowP2, player2, colP2);
 				
 				for (int i = 0; i < sizePlayer1; i++) {
 					// this "if" takes into account that the cards are above each one of them
+
 					if (spritesOfPlayer1[i].getGlobalBounds().contains(mousePosition) && spritesOfPlayer1[i + 1].getGlobalBounds().contains(mousePosition)) {
+                
+                        /*sizePill++;
+						texture.loadFromFile("Deck/card_0_6.png"); sprite.setTexture(texture);
+						spritesPill = addSprite(spritesPill, sprite, sizePill);*/
+                        //test = spritesOfPlayer1[i+1]; test.setPosition(400, 400);
 
-						texture.loadFromFile("Deck/card_0_6.png"); sprite.setTexture(texture); //sprite.setPosition(520, 260);
-
-						spritesPill = addSprite(spritesPill, sprite, sizePill);//spritesOfPlayer1[i+1]
 						sizePill++;
+						addSprite(spritesPill, spritesOfPlayer1[i+1], sizePill);
+
 						firstCard = true;
 						
 						cout << " entro a la carta" << i + 2 << endl;
@@ -191,7 +199,7 @@ void Game::gameWindow(RenderWindow& _window)
 			}
 
 			windowGame.clear(Color::Red);
-
+           
 			game1.printHideCard(windowGame);
 			game1.drawPillDeck(windowGame, row, col,spritesPill,sizePill,firstCard);
 
@@ -200,6 +208,8 @@ void Game::gameWindow(RenderWindow& _window)
 
 			game1.deckOfPlayer(player2, rowP2, colP2, sizePlayer2);
 			game1.drawPlayerTwoDeck(windowGame, player2, sizePlayer2);
+
+			//windowGame.draw(test);
 
 			windowGame.display();
 		}
@@ -242,7 +252,6 @@ void Game::addCardOnPlayerDeck(Vector2f& mousePosition, bool& turns, int& sizePl
 
 void Game::drawPlayerDeck(RenderWindow& _game,Player& _player,int _size, Sprite*& spritesOfPlayer)
 {	
-	 Sprite* auxSprites = new Sprite[_size];
 	for (int i = 0; i < _size; i++) {
 
 		texture.loadFromFile(_player.getDeck().getCards()[0][i].getUrl());
@@ -252,11 +261,22 @@ void Game::drawPlayerDeck(RenderWindow& _game,Player& _player,int _size, Sprite*
 		sprite.setPosition(50.0f + i * 60.0f, 500.0f);
 		sprite.setScale(0.24f, 0.24f);
 
-         _game.draw(sprite);
+        // _game.draw(sprite);
 
-		 auxSprites[i] = sprite;
+		 if (i < 7) {
+			 spritesOfPlayer[i] = sprite;
+		 }
+		 else {
+			 addSprite(spritesOfPlayer, sprite, _size);
+		 }
+
+		 _game.draw(spritesOfPlayer[i]);
+
+		/*spritesOfPlayer[0].setPosition(500,600);
+		 _game.draw(spritesOfPlayer[0]);*/
+
 	}
-	 spritesOfPlayer = auxSprites;
+        
 }
 
 void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int _size)
@@ -285,7 +305,7 @@ void Game::drawPillDeck(RenderWindow& _game, int _row, int _col, Sprite*& sprite
 {
     for(int i = 0; i < sizePill;i++){
 
-		if (firstCard == false && i==0) {
+		if (firstCard == false && i == 0) {
 			texture.loadFromFile("Deck/card_" + to_string(_row) + "_" + to_string(_col) + ".png");
 
 			sprite.setTexture(texture);// we get that position from the matrix
@@ -296,10 +316,13 @@ void Game::drawPillDeck(RenderWindow& _game, int _row, int _col, Sprite*& sprite
 			
 			spritesPill[i] = sprite;
 		}
-		else {
+		else if (i != 0){
+
 			spritesPill[i].setPosition(510, 260);
 			_game.draw(spritesPill[i]);
+           // spritesPill[1].setPosition(400, 200); _game.draw(spritesPill[1]);
 		}
+		
 		
 	}
 	
@@ -324,9 +347,15 @@ Sprite Game::spriteOfHideCard()
 
 Sprite* Game::addSprite(Sprite*& spritesPill,Sprite& _sprite, int _size)
 {
-	Sprite* tempSprite = new Sprite[_size+1];
-	tempSprite[_size] = _sprite;
+	Sprite* tempSprite = new Sprite[_size];//size+1
+	for (int i = 0; i < _size-1; i++) {
+		tempSprite[i] = spritesPill[i];
+	}
+	tempSprite[_size-1] = _sprite;
+	delete[] spritesPill;
 	spritesPill = tempSprite;
+
+
 
 	return spritesPill;
 }
