@@ -173,21 +173,30 @@ void Game::gameWindow(RenderWindow& _window)
 				
 				addCardOnPlayerDeck(mousePosition, turns, sizePlayer1, rowP1, colP1, sizePlayer2, rowP2, player2, colP2);
 				
+
 				for (int i = 0; i < sizePlayer1; i++) {
 					// this "if" takes into account that the cards are above each one of them
 
-					if (spritesOfPlayer1[i].getGlobalBounds().contains(mousePosition) && spritesOfPlayer1[i + 1].getGlobalBounds().contains(mousePosition)) {
-                       
-						sizePill++;
-						urlOfCardAdded = player1.getDeck().getCards()[0][i+1].getUrl();
+					if (spritesOfPlayer1[i].getGlobalBounds().contains(mousePosition) && 
+						spritesOfPlayer1[i + 1].getGlobalBounds().contains(mousePosition) && (i != 0 || i != sizePlayer1-1)){ 
 
-						firstCard = true;
+							sizePill++;
+							urlOfCardAdded = player1.getDeck().getCards()[0][i+1].getUrl();
+							cout << player1.getDeck().getCards()[0][i+1].getUrl() << endl;
+							firstCard = true;
 						
-						cout << " entro a la carta" << i + 2 << endl;
-					}
-					else if ((i == 0 && spritesOfPlayer1[0].getGlobalBounds().contains(mousePosition)) || (i == sizePlayer1 - 1 && spritesOfPlayer1[sizePlayer1 - 1].getGlobalBounds().contains(mousePosition))) {
-
-						cout << " entro a la carta" << i + 1 << endl;
+						
+							//sizePill++;
+							//urlOfCardAdded = player1.getDeck().getCards()[0][i].getUrl();
+							//cout << "2" << endl;
+							////cout << player1.getDeck().getCards()[0][i].getUrl() << endl;
+							//firstCard = true;
+						
+						//cout << " entro a la carta" << i + 2 << endl;
+					}                                                                                     //i=sizeplayer-1                                                       
+					else if ((i == 0 && spritesOfPlayer1[0].getGlobalBounds().contains(mousePosition)) || (i == sizePlayer1-2 && spritesOfPlayer1[sizePlayer1 - 1].getGlobalBounds().contains(mousePosition))) {
+						cout << "if 2" << endl;
+						//cout << " entro a la carta" << i + 1 << endl;
 					}
 				}
 			}
