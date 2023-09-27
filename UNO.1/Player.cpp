@@ -27,6 +27,7 @@ void Player::setDeck(int* rows, int* cols,int _size)
 		//agarra los strings del mazo ya definido de cartas
 		
 	}
+
 	 this->deck = Deck(deckOfPlayer, _size);
 
 }
