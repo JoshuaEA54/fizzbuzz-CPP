@@ -154,7 +154,7 @@ void Game::gameWindow(RenderWindow& _window)
 	int* rowP2 = player2.makeRandomVectorRowsForPlayers(sizePlayer2);
 	int* colP2 = player2.makeRandomVectorColumnsForPlayers(sizePlayer2);
 
-	bool turns = true, firstCard = false;
+	bool turns = true, firstCard = false, eliminate = false; 
 
 	string urlOfCardAdded = "";
 	int i_position = -1;
@@ -175,7 +175,7 @@ void Game::gameWindow(RenderWindow& _window)
 
 				if (turns == true) {
 					addCardOnPlayerOneDeck(mousePosition, sizePlayer1, rowP1, colP1, player1);
-					throwCardPlayer1(sizePlayer1, spritesOfPlayer1, mousePosition, sizePill, urlOfCardAdded, player1, firstCard, turns,i_position);
+					throwCardPlayer1(sizePlayer1, spritesOfPlayer1, mousePosition, sizePill, urlOfCardAdded, player1, firstCard, turns,i_position,eliminate);
 				}
 				else {//changes turn
 					addCardOnPlayerTwoDeck(mousePosition, sizePlayer2, rowP2, colP2, player2);
@@ -191,7 +191,7 @@ void Game::gameWindow(RenderWindow& _window)
 		game1.drawPillDeck(windowGame, row, col, urlOfCardAdded, sizePill, firstCard);
 
 		game1.deckOfPlayer(player1, rowP1, colP1, sizePlayer1);
-		game1.drawPlayerDeck(windowGame, player1, sizePlayer1, spritesOfPlayer1,urlOfCardAdded,i_position);
+		game1.drawPlayerDeck(windowGame, player1, sizePlayer1, spritesOfPlayer1,urlOfCardAdded,i_position,eliminate);
 
 		game1.deckOfPlayer(player2, rowP2, colP2, sizePlayer2);
 		game1.drawPlayerTwoDeck(windowGame, player2, sizePlayer2, spritesOfPlayer2, urlOfCardAdded, i_position2);
@@ -202,8 +202,8 @@ void Game::gameWindow(RenderWindow& _window)
 delete[] spritesOfPlayer1, spritesOfPlayer2, rowP1, rowP2, colP1, colP2;
 }
 
-void Game::throwCardPlayer1(int sizePlayer1, Sprite* spritesOfPlayer1, Vector2f& mousePosition, int& sizePill,
-	string& urlOfCardAdded, Player& player1, bool& firstCard,bool& turns, int& i_position)
+void Game::throwCardPlayer1(int& sizePlayer1, Sprite* spritesOfPlayer1, Vector2f& mousePosition, int& sizePill,
+	string& urlOfCardAdded, Player& player1, bool& firstCard,bool& turns, int& i_position, bool& eliminate)
 {
 	for (int i = 0; i < sizePlayer1; i++) {
 		// this "if" takes into account that the cards are above each one of them
@@ -220,8 +220,10 @@ void Game::throwCardPlayer1(int sizePlayer1, Sprite* spritesOfPlayer1, Vector2f&
 				urlOfCardAdded = player1.getDeck().getCards()[0][i + 1].getUrl();
 				i_position = i + 1;
 			}
+
 			firstCard = true;
 			turns = false;
+			eliminate = true;
 			//cout << " if 1" << endl;
 			
 		}                                                                                     //i=sizeplayer-1                                                       
@@ -238,6 +240,7 @@ void Game::throwCardPlayer1(int sizePlayer1, Sprite* spritesOfPlayer1, Vector2f&
 			}
 			firstCard = true;
 			turns = false;
+			eliminate = true;
 			//cout << "if 2" << endl;
 			
 		}
@@ -313,48 +316,74 @@ void Game::addCardOnPlayerTwoDeck(Vector2f& mousePosition, int& sizePlayer2, int
 	}
 }
 
-void Game::drawPlayerDeck(RenderWindow& _game,Player& _player,int _size, Sprite*& spritesOfPlayer, string& urlOfCardAdded, int& i_position)
+void Game::eliminateCardOnPlayerDeck(Player& _player, int& _size, int& positionOfChanges)
+{
+	string temp = "";
+	cout << " inicio " << endl << endl;
+	cout << _player.getDeck().getCards()[0][positionOfChanges].getUrl() << endl;
+
+	for (int i = positionOfChanges; i < _size-1; i++) {
+
+		/*cout << "--------------------------------------------------------------------------------" << endl;
+        cout << " posicion '" << i << " ' : " << _player.getDeck().getCards()[0][i].getUrl() << endl;
+        cout << " posicion '"<< i+1 << " ' : " << _player.getDeck().getCards()[0][i + 1].getUrl() << endl;
+		cout << "--------------------------------------------------------------------------------" << endl;*/
+		
+			temp = _player.getDeck().getCards()[0][i].getUrl();
+			_player.getDeck().getCards()[0][i].setUrl(_player.getDeck().getCards()[0][i + 1].getUrl());
+			_player.getDeck().getCards()[0][i + 1].setUrl(temp);
+			
+	}
+    cout << _player.getDeck().getCards()[0][_size-1].getUrl() << endl;
+
+	cout << " final " << endl << endl;
+	_size = _size - 1;
+
+	//_player.getDeck().setAmount(_size);
+	
+	//_player.setDeck(rowP, colP, _size);
+}
+
+void Game::drawPlayerDeck(RenderWindow& _game,Player& _player,int& _size, Sprite*& spritesOfPlayer, string& urlOfCardAdded, int i_position, bool& eliminate)
 {	
-	float cord1 = 50.0f;
-	float cord2 = 60.0f;
-    int aux = 0;
 
 	for (int i = 0; i < _size; i++) {
 		
-		if (_player.getDeck().getCards()[0][i].getUrl() == urlOfCardAdded && i == i_position) {
-			aux = aux -1;
-			//falta eliminar el card en esa posicion,que no vuelva
+		if (_player.getDeck().getCards()[0][i].getUrl() == urlOfCardAdded && i == i_position && eliminate == true) {
+
+			eliminateCardOnPlayerDeck(_player, _size, i_position);
+			eliminate = false;
+			
+			/*i_position = -1;
+			temp = "";*/
+		}
+		
+			texture.loadFromFile(_player.getDeck().getCards()[0][i].getUrl());
+			cout << _player.getDeck().getCards()[0][_size-1].getUrl() << endl << endl;
+			//segunda vuelta muestra mal el numero
+
+			sprite.setTexture(texture);
+
+			sprite.setPosition(50.0f + i * 60.0f, 500.0f);
+			sprite.setScale(0.24f, 0.24f);
+
+			_game.draw(sprite);
+		
+		if (i < 7) {
+				spritesOfPlayer[i] = sprite;
 		}
 		else {
-         texture.loadFromFile(_player.getDeck().getCards()[0][i].getUrl());
-
-		 sprite.setTexture(texture);
-
-		 sprite.setPosition(cord1 + aux * cord2, 500.0f);
-		 sprite.setScale(0.24f, 0.24f);
-
-         _game.draw(sprite);
-
-		 if (i < 7) {
-			 spritesOfPlayer[i] = sprite;
-		 }
-		 else {
-			 addSprite(spritesOfPlayer, sprite, _size);
-		 }
-
-		 //_game.draw(spritesOfPlayer[i]);
+				addSprite(spritesOfPlayer, sprite, _size);
 		}
-		// si la posicion i, el url es igual a el url que tengo tal cosa
-		aux++;
-		
+		 //_game.draw(spritesOfPlayer[i]);
+		//aux++;
 	}
         
 }
 
-void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int _size, Sprite*& spritesOfPlayer, string& urlOfCardAdded, int& i_position2)
+void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int& _size, Sprite*& spritesOfPlayer, string urlOfCardAdded, int& i_position2)
 {
-	float cord1 = 50.0f;
-	float cord2 = 60.0f;
+	
 	int aux = 0;
 
 	for (int i = 0; i < _size; i++) {
@@ -367,7 +396,7 @@ void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int _size, Sp
 
 			sprite.setTexture(texture);
 
-			sprite.setPosition(cord1 + aux * cord2, 30.0f);
+			sprite.setPosition(50.0f + aux * 60.0f, 30.0f);
 			sprite.setScale(0.24f, 0.24f);
 
 			_game.draw(sprite);
