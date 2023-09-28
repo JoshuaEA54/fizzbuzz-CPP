@@ -46,9 +46,9 @@ void Game::mainWindow()
 	RenderWindow window;
 	window.create(VideoMode(1366, 768), "UNO", Style::Default);
 
-	/*Music music;
+	Music music;
 	music.openFromFile("UNO 2K17 Full Music Album.ogg");
-	music.play();*/
+	music.play();
 
 	// Cargar una imagen desde un archivo
 	Texture texture;
@@ -180,11 +180,11 @@ void Game::gameWindow(RenderWindow& _window)
 				Vector2f mousePosition = windowGame.mapPixelToCoords(Mouse::getPosition(windowGame));
 
 				if (turns == true) {
-					addCardOnPlayerOneDeck(mousePosition, sizePlayer1, rowP1, colP1, player1);
+					addCardOnPlayerOneDeck(mousePosition, sizePlayer1, rowP1, colP1, player1,accessToPlayer1Deck);
 					throwCardPlayer1(sizePlayer1, spritesOfPlayer1, mousePosition, sizePill, urlOfCardAdded, player1, firstCard, turns, i_position, eliminate);
 				}
 				else {//changes turn
-					addCardOnPlayerTwoDeck(mousePosition, sizePlayer2, rowP2, colP2, player2);
+					addCardOnPlayerTwoDeck(mousePosition, sizePlayer2, rowP2, colP2, player2,accessToPlayer2Deck);
 					throwCardPlayer2(sizePlayer2, spritesOfPlayer2, mousePosition, sizePill, urlOfCardAdded, player2, firstCard, turns, i_position2, eliminate2);
 				}
 			}
@@ -241,7 +241,8 @@ void Game::throwCardPlayer1(int& sizePlayer1, Sprite* spritesOfPlayer1, Vector2f
 			//cout << " if 1" << endl;
 
 		}                                                                                     //i=sizeplayer-1                                                       
-		else if ((i == 0 && spritesOfPlayer1[0].getGlobalBounds().contains(mousePosition)) || (i == sizePlayer1 - 2 && spritesOfPlayer1[sizePlayer1 - 1].getGlobalBounds().contains(mousePosition))) {
+		else if ((i == 0 && spritesOfPlayer1[0].getGlobalBounds().contains(mousePosition)) || 
+			(i == sizePlayer1 - 2 && spritesOfPlayer1[sizePlayer1 - 1].getGlobalBounds().contains(mousePosition))) {
 
 			sizePill++;
 			if (i == sizePlayer1 - 2) {
@@ -303,7 +304,7 @@ void Game::throwCardPlayer2(int sizePlayer2, Sprite* spritesOfPlayer2, Vector2f&
 	}
 }
 
-void Game::addCardOnPlayerOneDeck(Vector2f& mousePosition, int& sizePlayer1, int* rowP1, int* colP1, Player& _player1)
+void Game::addCardOnPlayerOneDeck(Vector2f& mousePosition, int& sizePlayer1, int*& rowP1, int*& colP1, Player& _player1,bool& accessToPlayer1Deck)
 {
 	if (spriteOfHideCard().getGlobalBounds().contains(mousePosition)) {
 
@@ -314,14 +315,14 @@ void Game::addCardOnPlayerOneDeck(Vector2f& mousePosition, int& sizePlayer1, int
 
 			sizePlayer1 += 1; // we increase the size of the vector of cards
 
-			//agarar lo que el jugador tiene de baraja y añadirle una nueva
-
+			accessToPlayer1Deck = true;
+			
 		}
 
 	}
 }
 
-void Game::addCardOnPlayerTwoDeck(Vector2f& mousePosition, int& sizePlayer2, int* rowP2, int* colP2, Player& _player2)
+void Game::addCardOnPlayerTwoDeck(Vector2f& mousePosition, int& sizePlayer2, int*& rowP2, int*& colP2, Player& _player2, bool& accessToPlayer2Deck)
 {
 	if (spriteOfHideCard().getGlobalBounds().contains(mousePosition)) {
 
@@ -331,6 +332,8 @@ void Game::addCardOnPlayerTwoDeck(Vector2f& mousePosition, int& sizePlayer2, int
 			colP2 = _player2.addColumnInVectorOfPlayer(colP2, sizePlayer2);// we add a new image
 
 			sizePlayer2 += 1; // we increase the size of the vector of cards
+
+			accessToPlayer2Deck = true;
 		}
 	}
 }
@@ -338,26 +341,19 @@ void Game::addCardOnPlayerTwoDeck(Vector2f& mousePosition, int& sizePlayer2, int
 void Game::eliminateCardOnPlayerDeck(Player& _player, int& _size, int& positionOfChanges)
 {
 	string temp = "";
-	cout << " inicio " << endl << endl;
-	cout << _player.getDeck().getCards()[0][positionOfChanges].getUrl() << endl;
+	
+	//cout << _player.getDeck().getCards()[0][positionOfChanges].getUrl() << endl;
 
 	for (int i = positionOfChanges; i < _size - 1; i++) {
-
-		/*cout << "--------------------------------------------------------------------------------" << endl;
-		cout << " posicion '" << i << " ' : " << _player.getDeck().getCards()[0][i].getUrl() << endl;
-		cout << " posicion '"<< i+1 << " ' : " << _player.getDeck().getCards()[0][i + 1].getUrl() << endl;
-		cout << "--------------------------------------------------------------------------------" << endl;*/
 
 		temp = _player.getDeck().getCards()[0][i].getUrl();
 		_player.getDeck().getCards()[0][i].setUrl(_player.getDeck().getCards()[0][i + 1].getUrl());
 		_player.getDeck().getCards()[0][i + 1].setUrl(temp);
 
 	}
-	cout << _player.getDeck().getCards()[0][_size - 1].getUrl() << endl;
+	//cout << _player.getDeck().getCards()[0][_size - 1].getUrl() << endl;
 
-	cout << " final " << endl << endl;
 	_size = _size - 1;
-
 	//_player.getDeck().setAmount(_size);
 
 	//_player.setDeck(rowP, colP, _size);
@@ -365,7 +361,6 @@ void Game::eliminateCardOnPlayerDeck(Player& _player, int& _size, int& positionO
 
 void Game::drawPlayerDeck(RenderWindow& _game, Player& _player, int& _size, Sprite*& spritesOfPlayer, string& urlOfCardAdded, int i_position, bool& eliminate)
 {
-
 	for (int i = 0; i < _size; i++) {
 
 		if (_player.getDeck().getCards()[0][i].getUrl() == urlOfCardAdded && i == i_position && eliminate == true) {
@@ -373,14 +368,11 @@ void Game::drawPlayerDeck(RenderWindow& _game, Player& _player, int& _size, Spri
 			eliminateCardOnPlayerDeck(_player, _size, i_position);
 			eliminate = false;
 
-			/*i_position = -1;
-			temp = "";*/
 		}
 
 		texture.loadFromFile(_player.getDeck().getCards()[0][i].getUrl());
-		cout << _player.getDeck().getCards()[0][_size - 1].getUrl() << endl << endl;
-		//segunda vuelta muestra mal el numero
-
+		//cout << _player.getDeck().getCards()[0][_size - 1].getUrl() << endl << endl;
+		
 		sprite.setTexture(texture);
 
 		sprite.setPosition(50.0f + i * 60.0f, 500.0f);
@@ -395,15 +387,13 @@ void Game::drawPlayerDeck(RenderWindow& _game, Player& _player, int& _size, Spri
 			addSprite(spritesOfPlayer, sprite, _size);
 		}
 		//_game.draw(spritesOfPlayer[i]);
-	   //aux++;
+	   
 	}
 
 }
 
 void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int& _size, Sprite*& spritesOfPlayer, string urlOfCardAdded, int i_position2, bool& eliminate2)
 {
-
-
 	for (int i = 0; i < _size; i++) {
 
 		if (_player.getDeck().getCards()[0][i].getUrl() == urlOfCardAdded && i == i_position2 && eliminate2 == true) {
@@ -427,10 +417,7 @@ void Game::drawPlayerTwoDeck(RenderWindow& _game, Player& _player, int& _size, S
 		else {
 			addSprite(spritesOfPlayer, sprite, _size);
 		}
-
 		//_game.draw(spritesOfPlayer[i]);
-
-
 	}
 
 }
@@ -490,13 +477,14 @@ Sprite Game::spriteOfHideCard()
 Sprite* Game::addSprite(Sprite*& spritesPill, Sprite& _sprite, int _size)
 {
 	Sprite* tempSprite = new Sprite[_size];//size+1
+
 	for (int i = 0; i < _size - 1; i++) {//size 2, 0 
 		tempSprite[i] = spritesPill[i];// el de firstcard
 	}
+
 	tempSprite[_size - 1] = _sprite;
 	delete[] spritesPill;
 	spritesPill = tempSprite;
 
 	return spritesPill;
 }
-

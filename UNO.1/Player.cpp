@@ -25,7 +25,6 @@ void Player::setDeck(int* rows, int* cols,int _size)
 
 		deckOfPlayer[0][i].setUrl(deck.fulldeckk()[rows[i]][cols[i]].getUrl());
 		//agarra los strings del mazo ya definido de cartas
-		
 	}
 
 	 this->deck = Deck(deckOfPlayer, _size);
@@ -69,11 +68,10 @@ int* Player::addRowInVectorOfPlayer(int* _vector, int _size)
 {
 	int* temporalVector = new int[_size + 1];
 	for (int i = 0; i < _size; i++) {
-		temporalVector = _vector;// last position empty
+		temporalVector[i] = _vector[i];// last position empty
 	}
 	int random = rand() % 8;
 	temporalVector[_size] = random;
-
 	
 	return temporalVector;
 }
@@ -82,10 +80,12 @@ int* Player::addColumnInVectorOfPlayer(int* _vector, int _size)
 {
 	int* temporalVector = new int[_size + 1];
 	for (int i = 0; i < _size; i++) {
-		temporalVector = _vector;// last position empty
+		temporalVector[i] = _vector[i];// last position empty
 	}
 	int random = rand() % 14;
 	temporalVector[_size] = random; // last position filled
 
 	return temporalVector;
 }
+
+
