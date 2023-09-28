@@ -40,8 +40,9 @@ public:
 	void throwCardPlayer1(int& sizePlayer1, Sprite* spritesOfPlayer1, Vector2f& mousePosition, int& sizePill, string& urlOfCardAdded, Player& player1, bool& firstCard, bool& turns, int& i_position, bool& eliminate);
 	void throwCardPlayer2(int sizePlayer2, Sprite* spritesOfPlayer2, Vector2f& mousePosition, int& sizePill, string& urlOfCardAdded, Player& player2, bool& firstCard, bool& turns, int& i_position, bool& eliminate2);
 
-	void addCardOnPlayerOneDeck(Vector2f& mousePosition, int& sizePlayer1, int* rowP1, int* colP1,Player& _player1);
-	void addCardOnPlayerTwoDeck(Vector2f& mousePosition, int& sizePlayer2, int* rowP2, int* colP2,Player& _player2);
+	void addCardOnPlayerOneDeck(Vector2f& mousePosition, int& sizePlayer1, int*& rowP1, int*& colP1,Player& _player1, bool& accessToPlayer1Deck);
+	
+	void addCardOnPlayerTwoDeck(Vector2f& mousePosition, int& sizePlayer2, int*& rowP2, int*& colP2,Player& _player2, bool& accessToPlayer2Deck);
 
 	void eliminateCardOnPlayerDeck(Player& _player, int& _size, int& positionOfChanges);
 	
