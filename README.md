@@ -1,2 +1,2 @@
-# fizzbuzz-CPP
-Ejemplo de codificación del fizzbuzz en c++
+# UNO
+Intento de creacion del Juego UNO en c++, usando SFML
